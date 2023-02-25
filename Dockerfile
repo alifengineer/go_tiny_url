@@ -1,8 +1,8 @@
 FROM golang:1.16 as builder
 
 #
-RUN mkdir -p $GOPATH/src/gitlab.udevs.io/auth_api_gateway
-WORKDIR $GOPATH/src/gitlab.udevs.io/auth_api_gateway
+RUN mkdir -p $GOPATH/src/github.dilmurodov/auth_api_gateway
+WORKDIR $GOPATH/src/github.dilmurodov/auth_api_gateway
 
 # Copy the local package files to the container's workspace.
 COPY . ./

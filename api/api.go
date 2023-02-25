@@ -12,7 +12,6 @@ import (
 
 // SetUpRouter godoc
 // @description This is a api gateway
-// @termsOfService https://udevs.io
 func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 	r = gin.New()
 

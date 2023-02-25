@@ -1,1 +1,1 @@
-# udevs_go_auth_service
+# go_auth_api_gateway
