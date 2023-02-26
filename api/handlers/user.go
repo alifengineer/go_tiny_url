@@ -40,9 +40,7 @@ func (h *Handler) RegisterUser(c *gin.Context) {
 	if err != nil {
 		h.handleResponse(c, http.GRPCError, err.Error())
 		return
-	}
-
-	
+	}	
 
 	h.handleResponse(c, http.Created, resp)
 }

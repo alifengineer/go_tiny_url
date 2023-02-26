@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 	pb "go_auth_api_gateway/genproto/auth_service"
 	"go_auth_api_gateway/storage"
 	"time"
@@ -23,6 +24,10 @@ func NewShortenerRepo(db *pgxpool.Pool) storage.ShortenerRepoI {
 
 func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (resp *pb.CreateShortUrlResponse, err error) {
 
+	var (
+		expireDate sql.NullString
+	)
+
 	id := uuid.New().String()
 
 	resp = &pb.CreateShortUrlResponse{}
@@ -36,7 +41,15 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 			user_id,
 			created_at,
 			updated_at
-		RETURNING id
+		) VALUES (
+			$1,
+			$2,
+			$3,
+			$4,
+			$5,
+			$6,
+			$7
+		)
 		`
 
 	_, err = s.db.Exec(ctx, query,
@@ -61,19 +74,29 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 			short_url,
 			expire_date		 
 		FROM urls WHERE id = $1`,
+		id,
 	).Scan(
 		&resp.Id,
 		&resp.LongUrl,
 		&resp.ShortUrl,
-		&resp.ExpireDate,
+		&expireDate,
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "error while getting short url")
 	}
+	resp.ExpireDate = expireDate.String
 
 	return resp, nil
 }
 func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error) {
+
+	resp = &pb.GetShortUrlResponse{}
+
+	var (
+		expireDate sql.NullString
+		createdAt  sql.NullString
+		updatedAt  sql.NullString
+	)
 
 	query := `
 		SELECT
@@ -90,14 +113,17 @@ func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequ
 	err = s.db.QueryRow(ctx, query, req.GetShortUrl()).Scan(
 		&resp.LongUrl,
 		&resp.ShortUrl,
-		&resp.ExpireDate,
+		&expireDate,
 		&resp.UserId,
-		&resp.CreatedAt,
-		&resp.UpdatedAt,
+		&createdAt,
+		&updatedAt,
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "error while getting short url")
 	}
+	resp.CreatedAt = createdAt.String
+	resp.UpdatedAt = updatedAt.String
+	resp.ExpireDate = expireDate.String
 
 	return
 }

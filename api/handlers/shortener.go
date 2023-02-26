@@ -55,16 +55,11 @@ func (h *Handler) CreateShortUrl(c *gin.Context) {
 // @Tags urls
 // @Accept json
 // @Produce json
-// @Param body body auth_service.GetShortUrlRequest true "Request body"
+// @Param hash path string true "short url hash"
 // @Success 201 {object} http.Response{data=auth_service.GetShortUrlResponse} "Response Body"
 func (h *Handler) GetShortUrl(c *gin.Context) {
 
 	var req pb.GetShortUrlRequest
-
-	if err := c.ShouldBindJSON(&req); err != nil {
-		h.handleResponse(c, http_status.BadRequest, err.Error())
-		return
-	}
 
 	hash := c.Param("hash")
 	if !utils.IsShortCorrect(hash) {
@@ -72,6 +67,7 @@ func (h *Handler) GetShortUrl(c *gin.Context) {
 		h.handleResponse(c, http_status.BadRequest, err.Error())
 		return
 	}
+	req.ShortUrl = hash
 
 	req.ShortUrl = hash
 	resp, err := h.services.ShortenerService().GetShortUrl(c, &req)
