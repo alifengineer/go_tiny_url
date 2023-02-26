@@ -1,4 +1,4 @@
-FROM golang:1.17 as builder
+FROM golang:1.18 as builder
 
 
 ENV $GOPATH=/go
@@ -12,11 +12,20 @@ WORKDIR $GOPATH/src/github.dilmurodov/app
 COPY . ./
 
 # installing depends and build
-RUN export CGO_ENABLED=0 && \
-    export GOOS=linux && \
-    go mod vendor && \
-    make build && \
-    mv ./bin/app /
+# RUN export CGO_ENABLED=0 && \
+#     export GOOS=linux && \
+#     go mod vendor && \
+#     make build && \
+#     mv ./bin/app /
+
+COPY ./ ./
+
+RUN go build -o /app ./cmd/main.go
+
+RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+RUN migrate -path ./migrations/postgres \
+    -database="postgres://postgres:admin@postgres-server:5454/shortener_db?sslmode=disable&x-migrations-table=migrations" up
 
 FROM alpine
 COPY --from=builder app .
