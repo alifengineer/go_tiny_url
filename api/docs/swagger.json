@@ -215,6 +215,75 @@
                 }
             }
         },
+        "/url-qrcode": {
+            "put": {
+                "description": "Convert Qrcode",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "url"
+                ],
+                "summary": "Url Convert Qrcode",
+                "operationId": "qr_code",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tiny-url",
+                        "name": "tiny-url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "QR code image",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "put": {
                 "security": [
@@ -418,7 +487,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/auth_service.LoginResponse"
+                                            "type": "string"
                                         }
                                     }
                                 }
@@ -675,46 +744,6 @@
         }
     },
     "definitions": {
-        "auth_service.ClientPlatform": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                },
-                "subdomain": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.ClientType": {
-            "type": "object",
-            "properties": {
-                "confirm_by": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                },
-                "self_recover": {
-                    "type": "boolean"
-                },
-                "self_register": {
-                    "type": "boolean"
-                }
-            }
-        },
         "auth_service.CreateShortUrlRequest": {
             "type": "object",
             "properties": {
@@ -825,142 +854,6 @@
                     "type": "string"
                 },
                 "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "client_platform": {
-                    "$ref": "#/definitions/auth_service.ClientPlatform"
-                },
-                "client_type": {
-                    "$ref": "#/definitions/auth_service.ClientType"
-                },
-                "permissions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Permission"
-                    }
-                },
-                "role": {
-                    "$ref": "#/definitions/auth_service.Role"
-                },
-                "sessions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Session"
-                    }
-                },
-                "token": {
-                    "$ref": "#/definitions/auth_service.Token"
-                },
-                "user": {
-                    "$ref": "#/definitions/auth_service.User"
-                },
-                "user_found": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "auth_service.Permission": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "parent_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.Role": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.Session": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "data": {
-                    "type": "string"
-                },
-                "expires_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "integration_id": {
-                    "type": "string"
-                },
-                "ip": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                },
-                "role_id": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.Token": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "expires_at": {
-                    "type": "string"
-                },
-                "refresh_in_seconds": {
-                    "type": "integer"
-                },
-                "refresh_token": {
-                    "type": "string"
-                },
-                "updated_at": {
                     "type": "string"
                 }
             }

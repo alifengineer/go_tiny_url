@@ -34,6 +34,7 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 	r.PUT("/user", h.UpdateUser)
 	r.DELETE("/user", h.DeleteUser)
 	r.PUT("/user/reset-password", h.ResetPassword)
+	r.PUT("/url-qrcode", h.UrlToQrcode)
 
 	v1 := r.Group("/v1")
 	{

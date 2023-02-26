@@ -4,12 +4,14 @@ import (
 	"fmt"
 	pb "go_auth_api_gateway/genproto/auth_service"
 	"go_auth_api_gateway/pkg/utils"
-	"net/http"
+
+	http "net/http"
 
 	http_status "go_auth_api_gateway/api/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/skip2/go-qrcode"
 )
 
 // CreateShortUrl godoc
@@ -152,4 +154,36 @@ func (h *Handler) GetAllUserUrls(c *gin.Context) {
 	}
 
 	h.handleResponse(c, http_status.OK, resp)
+}
+
+// UrlToQrcode godoc
+// @ID qr_code
+// @Router /url-qrcode [PUT]
+// @Summary Url Convert Qrcode
+// @Description Convert Qrcode
+// @Tags url
+// @Accept json
+// @Produce image/png
+// @Param tiny-url query string true "tiny-url"
+// @Success 200 {string} string "QR code image"
+// @Response 400 {object} http.Response{data=string} "Bad Request"
+// @Failure 500 {object} http.Response{data=string} "Server Error"
+func (h *Handler) UrlToQrcode(c *gin.Context) {
+	stringUrl := c.Query("tiny-url")
+
+	// Generate QR code image from the URL string
+	qrCode, err := qrcode.Encode(stringUrl, qrcode.Medium, 256)
+	if err != nil {
+		h.handleResponse(c, http_status.InternalServerError, "Error generating QR code")
+		return
+	}
+
+	// Set response header to indicate image type
+	c.Header("Content-Type", "image/png")
+
+	// Write image data to response body
+	c.Writer.Write(qrCode)
+
+	// Set response status to OK
+	c.Status(http_status.OK.Code)
 }
