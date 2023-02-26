@@ -150,3 +150,56 @@ func (s *shortenerRepo) IncClickCount(ctx context.Context, req *pb.IncClickCount
 
 	return resp, nil
 }
+
+func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUrlsRequest) (resp *pb.GetAllUserUrlsResponse, err error) {
+
+	resp = &pb.GetAllUserUrlsResponse{}
+	var (
+		totalCount int64
+	)
+
+	query := `
+		SELECT
+			id,
+			long_url,
+			short_url,
+			expire_date,
+			click_count,
+			count(1) OVER() AS total_count
+		FROM urls
+		WHERE user_id = $1
+	`
+
+	rows, err := s.db.Query(ctx, query, req.GetUserId())
+	if err != nil {
+		return nil, errors.Wrap(err, "error while getting all user urls")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			expireDate sql.NullString
+		)
+
+		url := &pb.UrlData{}
+
+		err = rows.Scan(
+			&url.Id,
+			&url.LongUrl,
+			&url.ShortUrl,
+			&expireDate,
+			&url.ClickCount,
+		)
+		if err != nil {
+			return nil, errors.Wrap(err, "error while scanning user urls")
+		}
+
+		url.ExpireDate = expireDate.String
+
+		resp.Urls = append(resp.Urls, url)
+		resp.TotalCount = totalCount
+	}
+
+	return resp, nil
+}

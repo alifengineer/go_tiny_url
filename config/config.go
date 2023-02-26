@@ -48,6 +48,10 @@ type Config struct {
 	AuthGRPCPort    string
 
 	ServiceHost string
+
+	RedisPassword string
+	RedisHost     string
+	RedisPort     string
 }
 
 // Load ...

@@ -3,12 +3,14 @@ package storage
 import (
 	"context"
 	pb "go_auth_api_gateway/genproto/auth_service"
+	"time"
 )
 
 type StorageI interface {
 	CloseDB()
 	User() UserRepoI
 	Shortener() ShortenerRepoI
+	RedisRepo() RedisRepoI
 }
 
 type UserRepoI interface {
@@ -24,5 +26,12 @@ type UserRepoI interface {
 type ShortenerRepoI interface {
 	CreateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (resp *pb.CreateShortUrlResponse, err error)
 	GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error)
-	IncClickCount(ctx context.Context, req *pb.IncClickCountRequest) (resp *pb.IncClickCountResponse, err error) 
+	IncClickCount(ctx context.Context, req *pb.IncClickCountRequest) (resp *pb.IncClickCountResponse, err error)
+	GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUrlsRequest) (resp *pb.GetAllUserUrlsResponse, err error)
+}
+
+type RedisRepoI interface {
+	Create(ctx context.Context, key string, obj interface{}, ttl time.Duration) error
+	Get(ctx context.Context, key string, resp interface{}) (bool, error)
+	Delete(ctx context.Context, key string) error
 }

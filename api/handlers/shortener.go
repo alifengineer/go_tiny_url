@@ -9,6 +9,7 @@ import (
 	http_status "go_auth_api_gateway/api/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // CreateShortUrl godoc
@@ -57,7 +58,7 @@ func (h *Handler) CreateShortUrl(c *gin.Context) {
 // @Produce json
 // @Param hash path string true "short url hash"
 // @Success 201 {object} http.Response{data=auth_service.GetShortUrlResponse} "Response Body"
-func (h *Handler) GetShortUrl(c *gin.Context) {
+func (h *Handler) GetShortUrlData(c *gin.Context) {
 
 	var req pb.GetShortUrlRequest
 
@@ -88,7 +89,7 @@ func (h *Handler) GetShortUrl(c *gin.Context) {
 // @Param hash path string true "short url hash"
 // @Success 201 {object} http.Response{data=string} "Response Body"
 func (h *Handler) HandleLonger(c *gin.Context) {
-	
+
 	url := c.Param("hash")
 	if !utils.IsShortCorrect(url) {
 		err := fmt.Errorf(utils.InvalidHashError, url)
@@ -96,9 +97,9 @@ func (h *Handler) HandleLonger(c *gin.Context) {
 		return
 	}
 
-	resp, err := h.services.ShortenerService().GetShortUrl(
+	resp, err := h.services.ShortenerService().HandleLongUrl(
 		c.Request.Context(),
-		&pb.GetShortUrlRequest{
+		&pb.HandleLongUrlRequest{
 			ShortUrl: url,
 		},
 	)
@@ -119,4 +120,36 @@ func (h *Handler) HandleLonger(c *gin.Context) {
 	}
 
 	c.Redirect(http.StatusMovedPermanently, resp.GetLongUrl())
+}
+
+// GetAllUserUrls godoc
+// @ID get_all_user_urls
+// @Router /v1/short-url/{user-id} [GET]
+// @Summary Get All User Urls
+// @Description Get All User Urls
+// @Tags urls
+// @Accept json
+// @Produce json
+// @Param user-id path string true "user id"
+// @Success 200 {object} http.Response{data=auth_service.GetAllUserUrlsResponse} "Response Body"
+// @Response 400 {object} http.Response{data=string} "Bad Request"
+// @Failure 500 {object} http.Response{data=string} "Server Error"
+func (h *Handler) GetAllUserUrls(c *gin.Context) {
+
+	userId := c.Param("user-id")
+	if _, err := uuid.Parse(userId); err != nil {
+		err := fmt.Errorf(utils.InvalidUUIDError, userId)
+		h.handleResponse(c, http_status.BadRequest, err.Error())
+		return
+	}
+
+	resp, err := h.services.ShortenerService().GetAllUserUrls(c, &pb.GetAllUserUrlsRequest{
+		UserId: userId,
+	})
+	if err != nil {
+		h.handleResponse(c, http_status.InternalServerError, err.Error())
+		return
+	}
+
+	h.handleResponse(c, http_status.OK, resp)
 }

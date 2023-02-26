@@ -38,7 +38,7 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 	v1 := r.Group("/v1")
 	{
 		v1.POST("/short-url", h.CreateShortUrl)
-		v1.GET("/short-url/:hash", h.GetShortUrl)
+		v1.GET("/short-url/:hash", h.GetShortUrlData)
 	}
 
 	sigma := r.Group("/sigma")

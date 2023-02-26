@@ -25,6 +25,8 @@ type ShortenerServiceClient interface {
 	CreateShortUrl(ctx context.Context, in *CreateShortUrlRequest, opts ...grpc.CallOption) (*CreateShortUrlResponse, error)
 	GetShortUrl(ctx context.Context, in *GetShortUrlRequest, opts ...grpc.CallOption) (*GetShortUrlResponse, error)
 	IncClickCount(ctx context.Context, in *IncClickCountRequest, opts ...grpc.CallOption) (*IncClickCountResponse, error)
+	HandleLongUrl(ctx context.Context, in *HandleLongUrlRequest, opts ...grpc.CallOption) (*HandleLongUrlResponse, error)
+	GetAllUserUrls(ctx context.Context, in *GetAllUserUrlsRequest, opts ...grpc.CallOption) (*GetAllUserUrlsResponse, error)
 }
 
 type shortenerServiceClient struct {
@@ -62,6 +64,24 @@ func (c *shortenerServiceClient) IncClickCount(ctx context.Context, in *IncClick
 	return out, nil
 }
 
+func (c *shortenerServiceClient) HandleLongUrl(ctx context.Context, in *HandleLongUrlRequest, opts ...grpc.CallOption) (*HandleLongUrlResponse, error) {
+	out := new(HandleLongUrlResponse)
+	err := c.cc.Invoke(ctx, "/auth_service.ShortenerService/HandleLongUrl", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shortenerServiceClient) GetAllUserUrls(ctx context.Context, in *GetAllUserUrlsRequest, opts ...grpc.CallOption) (*GetAllUserUrlsResponse, error) {
+	out := new(GetAllUserUrlsResponse)
+	err := c.cc.Invoke(ctx, "/auth_service.ShortenerService/GetAllUserUrls", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShortenerServiceServer is the server API for ShortenerService service.
 // All implementations must embed UnimplementedShortenerServiceServer
 // for forward compatibility
@@ -69,6 +89,8 @@ type ShortenerServiceServer interface {
 	CreateShortUrl(context.Context, *CreateShortUrlRequest) (*CreateShortUrlResponse, error)
 	GetShortUrl(context.Context, *GetShortUrlRequest) (*GetShortUrlResponse, error)
 	IncClickCount(context.Context, *IncClickCountRequest) (*IncClickCountResponse, error)
+	HandleLongUrl(context.Context, *HandleLongUrlRequest) (*HandleLongUrlResponse, error)
+	GetAllUserUrls(context.Context, *GetAllUserUrlsRequest) (*GetAllUserUrlsResponse, error)
 	mustEmbedUnimplementedShortenerServiceServer()
 }
 
@@ -84,6 +106,12 @@ func (UnimplementedShortenerServiceServer) GetShortUrl(context.Context, *GetShor
 }
 func (UnimplementedShortenerServiceServer) IncClickCount(context.Context, *IncClickCountRequest) (*IncClickCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IncClickCount not implemented")
+}
+func (UnimplementedShortenerServiceServer) HandleLongUrl(context.Context, *HandleLongUrlRequest) (*HandleLongUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleLongUrl not implemented")
+}
+func (UnimplementedShortenerServiceServer) GetAllUserUrls(context.Context, *GetAllUserUrlsRequest) (*GetAllUserUrlsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllUserUrls not implemented")
 }
 func (UnimplementedShortenerServiceServer) mustEmbedUnimplementedShortenerServiceServer() {}
 
@@ -152,6 +180,42 @@ func _ShortenerService_IncClickCount_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShortenerService_HandleLongUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HandleLongUrlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenerServiceServer).HandleLongUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth_service.ShortenerService/HandleLongUrl",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenerServiceServer).HandleLongUrl(ctx, req.(*HandleLongUrlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShortenerService_GetAllUserUrls_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllUserUrlsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenerServiceServer).GetAllUserUrls(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth_service.ShortenerService/GetAllUserUrls",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenerServiceServer).GetAllUserUrls(ctx, req.(*GetAllUserUrlsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ShortenerService_ServiceDesc is the grpc.ServiceDesc for ShortenerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +234,14 @@ var ShortenerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "IncClickCount",
 			Handler:    _ShortenerService_IncClickCount_Handler,
+		},
+		{
+			MethodName: "HandleLongUrl",
+			Handler:    _ShortenerService_HandleLongUrl_Handler,
+		},
+		{
+			MethodName: "GetAllUserUrls",
+			Handler:    _ShortenerService_GetAllUserUrls_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

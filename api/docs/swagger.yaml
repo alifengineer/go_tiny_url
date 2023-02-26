@@ -68,6 +68,15 @@ definitions:
       username:
         type: string
     type: object
+  auth_service.GetAllUserUrlsResponse:
+    properties:
+      total_count:
+        type: integer
+      urls:
+        items:
+          $ref: '#/definitions/auth_service.UrlData'
+        type: array
+    type: object
   auth_service.GetByCredentialsRequest:
     properties:
       password:
@@ -190,6 +199,25 @@ definitions:
       phone:
         type: string
       username:
+        type: string
+    type: object
+  auth_service.UrlData:
+    properties:
+      click_count:
+        type: string
+      created_at:
+        type: string
+      expire_date:
+        type: string
+      id:
+        type: string
+      long_url:
+        type: string
+      short_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
         type: string
     type: object
   auth_service.User:
@@ -571,6 +599,51 @@ paths:
                   $ref: '#/definitions/auth_service.GetShortUrlResponse'
               type: object
       summary: Get ShortUrl
+      tags:
+      - urls
+  /v1/short-url/{user-id}:
+    get:
+      consumes:
+      - application/json
+      description: Get All User Urls
+      operationId: get_all_user_urls
+      parameters:
+      - description: user id
+        in: path
+        name: user-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetAllUserUrlsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get All User Urls
       tags:
       - urls
 securityDefinitions:

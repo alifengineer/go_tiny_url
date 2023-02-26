@@ -10,6 +10,8 @@ const (
 	AccessTokenExpiresInTime time.Duration = 1 * 24 * 60 * time.Minute
 	// RefreshTokenExpiresInTime ...
 	RefreshTokenExpiresInTime time.Duration = 30 * 24 * 60 * time.Minute
+	// RedisCacheTTL ...
+	RedisCacheTTL time.Duration = 1 * 24 * 60 * time.Minute
 )
 
 var (

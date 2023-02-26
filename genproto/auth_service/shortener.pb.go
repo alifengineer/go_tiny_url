@@ -438,6 +438,305 @@ func (x *IncClickCountResponse) GetClickCount() int64 {
 	return 0
 }
 
+type HandleLongUrlRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ShortUrl string `protobuf:"bytes,1,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
+}
+
+func (x *HandleLongUrlRequest) Reset() {
+	*x = HandleLongUrlRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_shortener_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HandleLongUrlRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HandleLongUrlRequest) ProtoMessage() {}
+
+func (x *HandleLongUrlRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_shortener_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HandleLongUrlRequest.ProtoReflect.Descriptor instead.
+func (*HandleLongUrlRequest) Descriptor() ([]byte, []int) {
+	return file_shortener_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *HandleLongUrlRequest) GetShortUrl() string {
+	if x != nil {
+		return x.ShortUrl
+	}
+	return ""
+}
+
+type HandleLongUrlResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	LongUrl string `protobuf:"bytes,1,opt,name=long_url,json=longUrl,proto3" json:"long_url,omitempty"`
+}
+
+func (x *HandleLongUrlResponse) Reset() {
+	*x = HandleLongUrlResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_shortener_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HandleLongUrlResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HandleLongUrlResponse) ProtoMessage() {}
+
+func (x *HandleLongUrlResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_shortener_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HandleLongUrlResponse.ProtoReflect.Descriptor instead.
+func (*HandleLongUrlResponse) Descriptor() ([]byte, []int) {
+	return file_shortener_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *HandleLongUrlResponse) GetLongUrl() string {
+	if x != nil {
+		return x.LongUrl
+	}
+	return ""
+}
+
+type GetAllUserUrlsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+}
+
+func (x *GetAllUserUrlsRequest) Reset() {
+	*x = GetAllUserUrlsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_shortener_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetAllUserUrlsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllUserUrlsRequest) ProtoMessage() {}
+
+func (x *GetAllUserUrlsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_shortener_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllUserUrlsRequest.ProtoReflect.Descriptor instead.
+func (*GetAllUserUrlsRequest) Descriptor() ([]byte, []int) {
+	return file_shortener_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetAllUserUrlsRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type UrlData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ShortUrl   string `protobuf:"bytes,1,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
+	UserId     string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	ExpireDate string `protobuf:"bytes,3,opt,name=expire_date,json=expireDate,proto3" json:"expire_date,omitempty"`
+	LongUrl    string `protobuf:"bytes,4,opt,name=long_url,json=longUrl,proto3" json:"long_url,omitempty"`
+	CreatedAt  string `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt  string `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Id         string `protobuf:"bytes,7,opt,name=id,proto3" json:"id,omitempty"`
+	ClickCount string `protobuf:"bytes,8,opt,name=click_count,json=clickCount,proto3" json:"click_count,omitempty"`
+}
+
+func (x *UrlData) Reset() {
+	*x = UrlData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_shortener_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UrlData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UrlData) ProtoMessage() {}
+
+func (x *UrlData) ProtoReflect() protoreflect.Message {
+	mi := &file_shortener_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UrlData.ProtoReflect.Descriptor instead.
+func (*UrlData) Descriptor() ([]byte, []int) {
+	return file_shortener_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *UrlData) GetShortUrl() string {
+	if x != nil {
+		return x.ShortUrl
+	}
+	return ""
+}
+
+func (x *UrlData) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *UrlData) GetExpireDate() string {
+	if x != nil {
+		return x.ExpireDate
+	}
+	return ""
+}
+
+func (x *UrlData) GetLongUrl() string {
+	if x != nil {
+		return x.LongUrl
+	}
+	return ""
+}
+
+func (x *UrlData) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
+func (x *UrlData) GetUpdatedAt() string {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return ""
+}
+
+func (x *UrlData) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UrlData) GetClickCount() string {
+	if x != nil {
+		return x.ClickCount
+	}
+	return ""
+}
+
+type GetAllUserUrlsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Urls       []*UrlData `protobuf:"bytes,1,rep,name=urls,proto3" json:"urls,omitempty"`
+	TotalCount int64      `protobuf:"varint,2,opt,name=total_count,json=totalCount,proto3" json:"total_count,omitempty"`
+}
+
+func (x *GetAllUserUrlsResponse) Reset() {
+	*x = GetAllUserUrlsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_shortener_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetAllUserUrlsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllUserUrlsResponse) ProtoMessage() {}
+
+func (x *GetAllUserUrlsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_shortener_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllUserUrlsResponse.ProtoReflect.Descriptor instead.
+func (*GetAllUserUrlsResponse) Descriptor() ([]byte, []int) {
+	return file_shortener_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetAllUserUrlsResponse) GetUrls() []*UrlData {
+	if x != nil {
+		return x.Urls
+	}
+	return nil
+}
+
+func (x *GetAllUserUrlsResponse) GetTotalCount() int64 {
+	if x != nil {
+		return x.TotalCount
+	}
+	return 0
+}
+
 var File_shortener_proto protoreflect.FileDescriptor
 
 var file_shortener_proto_rawDesc = []byte{
@@ -492,9 +791,40 @@ var file_shortener_proto_rawDesc = []byte{
 	0x74, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x73, 0x68, 0x6f,
 	0x72, 0x74, 0x55, 0x72, 0x6c, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x6c, 0x69, 0x63, 0x6b, 0x5f, 0x63,
 	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x63, 0x6c, 0x69, 0x63,
-	0x6b, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x17, 0x5a, 0x15, 0x67, 0x65, 0x6e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6b, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x33, 0x0a, 0x14, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65,
+	0x4c, 0x6f, 0x6e, 0x67, 0x55, 0x72, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b,
+	0x0a, 0x09, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x08, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x55, 0x72, 0x6c, 0x22, 0x32, 0x0a, 0x15, 0x48,
+	0x61, 0x6e, 0x64, 0x6c, 0x65, 0x4c, 0x6f, 0x6e, 0x67, 0x55, 0x72, 0x6c, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x6c, 0x6f, 0x6e, 0x67, 0x5f, 0x75, 0x72, 0x6c,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6c, 0x6f, 0x6e, 0x67, 0x55, 0x72, 0x6c, 0x22,
+	0x30, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x55, 0x72, 0x6c,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
+	0x64, 0x22, 0xea, 0x01, 0x0a, 0x07, 0x55, 0x72, 0x6c, 0x44, 0x61, 0x74, 0x61, 0x12, 0x1b, 0x0a,
+	0x09, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x73, 0x68, 0x6f, 0x72, 0x74, 0x55, 0x72, 0x6c, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73,
+	0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65,
+	0x72, 0x49, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65, 0x5f, 0x64, 0x61,
+	0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65,
+	0x44, 0x61, 0x74, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x6c, 0x6f, 0x6e, 0x67, 0x5f, 0x75, 0x72, 0x6c,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6c, 0x6f, 0x6e, 0x67, 0x55, 0x72, 0x6c, 0x12,
+	0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x1d,
+	0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x0e, 0x0a,
+	0x02, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1f, 0x0a,
+	0x0b, 0x63, 0x6c, 0x69, 0x63, 0x6b, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0a, 0x63, 0x6c, 0x69, 0x63, 0x6b, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x64,
+	0x0a, 0x16, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x55, 0x72, 0x6c, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x04, 0x75, 0x72, 0x6c, 0x73,
+	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x55, 0x72, 0x6c, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x75,
+	0x72, 0x6c, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x5f, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x43,
+	0x6f, 0x75, 0x6e, 0x74, 0x42, 0x17, 0x5a, 0x15, 0x67, 0x65, 0x6e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -509,7 +839,7 @@ func file_shortener_proto_rawDescGZIP() []byte {
 	return file_shortener_proto_rawDescData
 }
 
-var file_shortener_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_shortener_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_shortener_proto_goTypes = []interface{}{
 	(*CreateShortUrlRequest)(nil),  // 0: auth_service.CreateShortUrlRequest
 	(*CreateShortUrlResponse)(nil), // 1: auth_service.CreateShortUrlResponse
@@ -517,13 +847,19 @@ var file_shortener_proto_goTypes = []interface{}{
 	(*GetShortUrlResponse)(nil),    // 3: auth_service.GetShortUrlResponse
 	(*IncClickCountRequest)(nil),   // 4: auth_service.IncClickCountRequest
 	(*IncClickCountResponse)(nil),  // 5: auth_service.IncClickCountResponse
+	(*HandleLongUrlRequest)(nil),   // 6: auth_service.HandleLongUrlRequest
+	(*HandleLongUrlResponse)(nil),  // 7: auth_service.HandleLongUrlResponse
+	(*GetAllUserUrlsRequest)(nil),  // 8: auth_service.GetAllUserUrlsRequest
+	(*UrlData)(nil),                // 9: auth_service.UrlData
+	(*GetAllUserUrlsResponse)(nil), // 10: auth_service.GetAllUserUrlsResponse
 }
 var file_shortener_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	9, // 0: auth_service.GetAllUserUrlsResponse.urls:type_name -> auth_service.UrlData
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_shortener_proto_init() }
@@ -604,6 +940,66 @@ func file_shortener_proto_init() {
 				return nil
 			}
 		}
+		file_shortener_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HandleLongUrlRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_shortener_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HandleLongUrlResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_shortener_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetAllUserUrlsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_shortener_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UrlData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_shortener_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetAllUserUrlsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -611,7 +1007,7 @@ func file_shortener_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_shortener_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

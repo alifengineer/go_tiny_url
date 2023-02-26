@@ -9,6 +9,7 @@ import (
 const (
 	InvalidHashError = "'%s' is not a valid short path."
 	InvalidURLError  = "'%s' is not a valid URL."
+	InvalidUUIDError = "'%s' is not a valid UUID."
 )
 
 var (
