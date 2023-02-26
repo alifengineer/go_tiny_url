@@ -10,10 +10,12 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/jackc/pgx/v4 v4.18.0
 	github.com/joho/godotenv v1.5.1
+	github.com/manveru/faker v0.0.0-20171103152722-9fbc68a78c4d
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.0.0-rc.4
 	github.com/saidamir98/udevs_pkg v0.0.0-20220413125729-5342e90c08a3
 	github.com/spf13/cast v1.5.0
+	github.com/stretchr/testify v1.8.1
 	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
@@ -30,6 +32,7 @@ require (
 	github.com/bytedance/sonic v1.8.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
@@ -56,11 +59,13 @@ require (
 	github.com/lib/pq v1.10.7 // indirect
 	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
+	github.com/manveru/gobdd v0.0.0-20131210092515-f1a17fdd710b // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/streamingfast/logging v0.0.0-20220405224725-2755dab2ce75 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.9 // indirect

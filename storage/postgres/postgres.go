@@ -41,7 +41,7 @@ func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, erro
 	}
 
 	redisClient := goRedis.NewClient(&goRedis.Options{
-		Addr:     fmt.Sprintf("%s:%d", cfg.RedisHost, cfg.RedisPort),
+		Addr:     fmt.Sprintf("%s:%s", cfg.RedisHost, cfg.RedisPort),
 		Password: cfg.RedisPassword,
 		DB:       0,
 	})
