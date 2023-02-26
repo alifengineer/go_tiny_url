@@ -27,13 +27,11 @@ func NewShortenerService(cfg config.Config, log logger.LoggerI, strg storage.Sto
 	}
 }
 
-func (self *shortenerService) CreateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (resp *pb.CreateShortUrlResponse, err error) {
-
-	
+func (s *shortenerService) CreateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (resp *pb.CreateShortUrlResponse, err error) {
 
 	return
 }
-func (self *shortenerService) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error) {
+func (s *shortenerService) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error) {
 
 	return
 }
