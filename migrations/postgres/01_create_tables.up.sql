@@ -21,5 +21,6 @@ CREATE TABLE IF NOT EXISTS "urls" (
     "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "deleted_at" INTEGER DEFAULT 0,
     "user_id" UUID REFERENCES "users" ("id"),
+    "limit_click" INTEGER,
     UNIQUE ("short_url","deleted_at")
 );

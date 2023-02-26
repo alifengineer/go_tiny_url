@@ -46,6 +46,8 @@ type Config struct {
 
 	AuthServiceHost string
 	AuthGRPCPort    string
+
+	ServiceHost string
 }
 
 // Load ...
@@ -56,7 +58,7 @@ func Load() Config {
 
 	config := Config{}
 
-	config.ServiceName = cast.ToString(getOrReturnDefaultValue("SERVICE_NAME", "udevs_go_auth_service"))
+	config.ServiceName = cast.ToString(getOrReturnDefaultValue("SERVICE_NAME", "shortener_service"))
 	config.Environment = cast.ToString(getOrReturnDefaultValue("ENVIRONMENT", DebugMode))
 	config.Version = cast.ToString(getOrReturnDefaultValue("VERSION", "1.0"))
 
@@ -84,6 +86,8 @@ func Load() Config {
 
 	config.AuthServiceHost = cast.ToString(getOrReturnDefaultValue("AUTH_SERVICE_HOST", "0.0.0.0"))
 	config.AuthGRPCPort = cast.ToString(getOrReturnDefaultValue("AUTH_GRPC_PORT", ":9103"))
+
+	config.ServiceHost = cast.ToString(getOrReturnDefaultValue("SERVICE_HOST", "http://localhost:8080/sigma/"))
 
 	return config
 }

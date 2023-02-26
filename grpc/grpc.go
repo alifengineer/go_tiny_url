@@ -21,6 +21,8 @@ func SetUpServer(cfg config.Config, log logger.LoggerI, strg storage.StorageI, s
 	auth_service.RegisterUserServiceServer(grpcServer, service.NewUserService(cfg, log, strg, svcs))
 	// auth_service.RegisterSessionServiceServer(grpcServer, service.NewSessionService(cfg, log, strg, svcs))
 
+	auth_service.RegisterShortenerServiceServer(grpcServer, service.NewShortenerService(cfg, log, strg, svcs))
+
 	reflection.Register(grpcServer)
 	return
 }

@@ -39,6 +39,17 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 
 	// r.POST("/upsert-user-info/:user-id", h.UpsertUserInfo)
 
+	v1 := r.Group("/v1")
+	{
+		v1.POST("/short-url", h.CreateShortUrl)
+		v1.GET("/short-url/:hash", h.GetShortUrl)
+	}
+
+	sigma := r.Group("/sigma")
+	{
+		sigma.GET("/:hash", h.HandleLonger)
+	}
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return
 }

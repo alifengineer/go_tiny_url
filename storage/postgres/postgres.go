@@ -21,6 +21,7 @@ type Store struct {
 	user storage.UserRepoI
 	// session         storage.SessionRepoI
 	// rolePermission   storage.RolePermissionRepoI
+	shortener storage.ShortenerRepoI
 }
 
 func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, error) {
@@ -131,3 +132,11 @@ func (s *Store) User() storage.UserRepoI {
 
 // 	return s.session
 // }
+
+func (s *Store) Shortener() storage.ShortenerRepoI {
+	if s.shortener == nil {
+		s.shortener = NewShortenerRepo(s.db)
+	}
+
+	return s.shortener
+}
