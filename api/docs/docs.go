@@ -16,6 +16,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+<<<<<<< HEAD
         "/client": {
             "put": {
                 "description": "Update Client",
@@ -3254,6 +3255,8 @@ const docTemplate = `{
                 }
             }
         },
+=======
+>>>>>>> c9acc7e7803328a20408f3c81c880aea0f19840d
         "/user": {
             "get": {
                 "description": "Get User List",
@@ -3526,385 +3529,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-info-field": {
-            "put": {
-                "description": "Update UserInfoField",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UserInfoField"
-                ],
-                "summary": "Update UserInfoField",
-                "operationId": "update_user_info_field",
-                "parameters": [
-                    {
-                        "description": "UpdateUserInfoFieldRequestBody",
-                        "name": "user-info-field",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth_service.UpdateUserInfoFieldRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "UserInfoField data",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/auth_service.UserInfoField"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create UserInfoField",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UserInfoField"
-                ],
-                "summary": "Create UserInfoField",
-                "operationId": "create_user_info_field",
-                "parameters": [
-                    {
-                        "description": "AddUserInfoFieldRequestBody",
-                        "name": "user-info-field",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth_service.AddUserInfoFieldRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "UserInfoField data",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/auth_service.UserInfoField"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/user-info-field/{user-info-field-id}": {
-            "delete": {
-                "description": "Get UserInfoField",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UserInfoField"
-                ],
-                "summary": "Delete UserInfoField",
-                "operationId": "delete_user_info_field",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user-info-field-id",
-                        "name": "user-info-field-id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Invalid Argument",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/user-relation": {
-            "post": {
-                "description": "Create UserRelation",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UserRelation"
-                ],
-                "summary": "Create UserRelation",
-                "operationId": "add_user_relation",
-                "parameters": [
-                    {
-                        "description": "AddUserRelationRequestBody",
-                        "name": "user-relation",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth_service.AddUserRelationRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "UserRelation data",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/auth_service.UserRelation"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Get UserRelation",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UserRelation"
-                ],
-                "summary": "Delete UserRelation",
-                "operationId": "delete_user_relation",
-                "parameters": [
-                    {
-                        "description": "UserRelationPrimaryKeyBody",
-                        "name": "user-relation",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth_service.UserRelationPrimaryKey"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Invalid Argument",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/user/reset-password": {
             "put": {
                 "description": "Reset Password",
@@ -3948,74 +3572,6 @@ const docTemplate = `{
                                 }
                             ]
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/user/send-message": {
-            "post": {
-                "description": "Send Message to User Email",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Send Message To User",
-                "operationId": "send_message_to_user_email",
-                "parameters": [
-                    {
-                        "description": "SendMessageToEmailRequestBody",
-                        "name": "send_message",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth_service.SendMessageToEmailRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
                     },
                     "400": {
                         "description": "Bad Request",
@@ -4333,146 +3889,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth_service.AddClientRequest": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "login_strategy": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.AddPermissionScopeRequest": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                },
-                "permission_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.AddRelationRequest": {
-            "type": "object",
-            "properties": {
-                "client_type_id": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.AddRolePermissionRequest": {
-            "type": "object",
-            "properties": {
-                "permission_id": {
-                    "type": "string"
-                },
-                "role_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.AddRolePermissionsRequest": {
-            "type": "object",
-            "properties": {
-                "permissions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.AddRolePermissionRequest"
-                    }
-                }
-            }
-        },
-        "auth_service.AddRolePermissionsResponse": {
-            "type": "object",
-            "properties": {
-                "added_roles": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.AddRoleRequest": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.AddUserInfoFieldRequest": {
-            "type": "object",
-            "properties": {
-                "client_type_id": {
-                    "type": "string"
-                },
-                "data_type": {
-                    "type": "string"
-                },
-                "field_name": {
-                    "type": "string"
-                },
-                "field_type": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.AddUserRelationRequest": {
-            "type": "object",
-            "properties": {
-                "relation_id": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.Client": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "login_strategy": {
-                    "type": "integer"
-                },
-                "project_id": {
-                    "type": "string"
-                }
-            }
-        },
         "auth_service.ClientPlatform": {
             "type": "object",
             "properties": {
@@ -4486,46 +3902,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "subdomain": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.ClientPlatformDetailedResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "permissions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Permission"
-                    }
-                },
-                "project_id": {
-                    "type": "string"
-                },
-                "scopes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Scope"
-                    }
-                },
-                "subdomain": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.ClientPrimaryKey": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
                     "type": "string"
                 }
             }
@@ -4553,6 +3929,7 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
         "auth_service.CompleteClientType": {
             "type": "object",
             "properties": {
@@ -4670,28 +4047,15 @@ const docTemplate = `{
                 }
             }
         },
+=======
+>>>>>>> c9acc7e7803328a20408f3c81c880aea0f19840d
         "auth_service.CreateUserRequest": {
             "type": "object",
             "properties": {
-                "active": {
-                    "type": "integer"
-                },
-                "client_platform_id": {
+                "first_name": {
                     "type": "string"
                 },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "expires_at": {
-                    "type": "string"
-                },
-                "login": {
-                    "type": "string"
-                },
-                "name": {
+                "last_name": {
                     "type": "string"
                 },
                 "password": {
@@ -4700,127 +4064,8 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
-                "photo_url": {
+                "username": {
                     "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                },
-                "role_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.GetClientMatrixResponse": {
-            "type": "object",
-            "properties": {
-                "client_platforms": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.ClientPlatform"
-                    }
-                },
-                "client_types": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.ClientType"
-                    }
-                },
-                "clients": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Client"
-                    }
-                }
-            }
-        },
-        "auth_service.GetClientPlatformListResponse": {
-            "type": "object",
-            "properties": {
-                "client_platforms": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.ClientPlatform"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.GetClientTypeListResponse": {
-            "type": "object",
-            "properties": {
-                "client_types": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.ClientType"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.GetPermissionByIDResponse": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "parent_id": {
-                    "type": "string"
-                },
-                "permission_scopes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.PermissionScope"
-                    }
-                }
-            }
-        },
-        "auth_service.GetPermissionListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "permissions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Permission"
-                    }
-                }
-            }
-        },
-        "auth_service.GetRolesResponse": {
-            "type": "object",
-            "properties": {
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Role"
-                    }
-                }
-            }
-        },
-        "auth_service.GetScopesResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "scopes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.Scope"
-                    }
                 }
             }
         },
@@ -4872,37 +4117,6 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_service.HasAccessRequest": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.LoginRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
         "auth_service.LoginResponse": {
             "type": "object",
             "properties": {
@@ -4938,14 +4152,6 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_service.LogoutRequest": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                }
-            }
-        },
         "auth_service.Permission": {
             "type": "object",
             "properties": {
@@ -4960,110 +4166,6 @@ const docTemplate = `{
                 },
                 "parent_id": {
                     "type": "string"
-                }
-            }
-        },
-        "auth_service.PermissionGenerated": {
-            "type": "object",
-            "properties": {
-                "permissions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.PermissionGenerated_Permission"
-                    }
-                }
-            }
-        },
-        "auth_service.PermissionGenerated_Permission": {
-            "type": "object",
-            "properties": {
-                "children": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.PermissionGenerated_Permission"
-                    }
-                },
-                "permission": {
-                    "type": "string"
-                },
-                "scopes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.PermissionGenerated_Permission_Scope"
-                    }
-                }
-            }
-        },
-        "auth_service.PermissionGenerated_Permission_Scope": {
-            "type": "object",
-            "properties": {
-                "method": {
-                    "type": "string"
-                },
-                "url": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.PermissionScope": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                },
-                "permission_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.PermissionScopePrimaryKey": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                },
-                "permission_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.RefreshTokenRequest": {
-            "type": "object",
-            "properties": {
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.Relation": {
-            "type": "object",
-            "properties": {
-                "client_type_id": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "integer"
                 }
             }
         },
@@ -5097,59 +4199,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "project_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.RolePermission": {
-            "type": "object",
-            "properties": {
-                "permission_id": {
-                    "type": "string"
-                },
-                "role_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.RolePermissionPrimaryKey": {
-            "type": "object",
-            "properties": {
-                "permission_id": {
-                    "type": "string"
-                },
-                "role_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.Scope": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                },
-                "requests": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.SendMessageToEmailRequest": {
-            "type": "object",
-            "properties": {
-                "base_url": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "token": {
                     "type": "string"
                 }
             }
@@ -5218,214 +4267,16 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_service.UpdateClientPlatformRequest": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "subdomain": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.UpdateClientRequest": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "login_strategy": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.UpdateClientTypeRequest": {
-            "type": "object",
-            "properties": {
-                "confirm_by": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "self_recover": {
-                    "type": "boolean"
-                },
-                "self_register": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "auth_service.UpdatePermissionRequest": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "parent_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.UpdateRelationRequest": {
-            "type": "object",
-            "properties": {
-                "client_type_id": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth_service.UpdateRoleRequest": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.UpdateUserInfoFieldRequest": {
-            "type": "object",
-            "properties": {
-                "client_type_id": {
-                    "type": "string"
-                },
-                "data_type": {
-                    "type": "string"
-                },
-                "field_name": {
-                    "type": "string"
-                },
-                "field_type": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
         "auth_service.UpdateUserRequest": {
             "type": "object",
             "properties": {
-                "active": {
-                    "type": "integer"
-                },
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "expires_at": {
+                "first_name": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "login": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "photo_url": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                },
-                "role_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.UpsertScopeRequest": {
-            "type": "object",
-            "properties": {
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.User": {
-            "type": "object",
-            "properties": {
-                "active": {
-                    "type": "integer"
-                },
-                "client_platform_id": {
-                    "type": "string"
-                },
-                "client_type_id": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "expires_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "login": {
-                    "type": "string"
-                },
-                "name": {
+                "last_name": {
                     "type": "string"
                 },
                 "password": {
@@ -5434,58 +4285,36 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
-                "photo_url": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
-                },
-                "role_id": {
-                    "type": "string"
-                },
-                "updated_at": {
+                "username": {
                     "type": "string"
                 }
             }
         },
-        "auth_service.UserInfoField": {
+        "auth_service.User": {
             "type": "object",
             "properties": {
-                "client_type_id": {
+                "created_at": {
                     "type": "string"
                 },
-                "data_type": {
-                    "type": "string"
-                },
-                "field_name": {
-                    "type": "string"
-                },
-                "field_type": {
+                "first_name": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
-                }
-            }
-        },
-        "auth_service.UserRelation": {
-            "type": "object",
-            "properties": {
-                "relation_id": {
+                },
+                "last_name": {
                     "type": "string"
                 },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.UserRelationPrimaryKey": {
-            "type": "object",
-            "properties": {
-                "relation_id": {
+                "password": {
                     "type": "string"
                 },
-                "user_id": {
+                "phone": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
