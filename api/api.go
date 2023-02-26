@@ -36,6 +36,7 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 		r.DELETE("/user", h.DeleteUser)
 		r.PUT("/user/reset-password", h.ResetPassword)
 		r.POST("/short-url", h.CreateShortUrl)
+		r.PUT("/short-url", h.UpdateShortUrl)
 		r.GET("/short-url/:hash", h.GetShortUrlData)
 		r.GET("sigma/:hash", h.HandleLonger)
 		r.PUT("/url-qrcode", h.UrlToQrcode)

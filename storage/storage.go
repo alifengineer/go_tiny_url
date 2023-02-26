@@ -25,6 +25,7 @@ type UserRepoI interface {
 }
 type ShortenerRepoI interface {
 	CreateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (resp *pb.CreateShortUrlResponse, err error)
+	UpdateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (rowsAffected int64, err error)
 	GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest, onlyExpired bool) (resp *pb.GetShortUrlResponse, err error)
 	IncClickCount(ctx context.Context, req *pb.IncClickCountRequest) (resp *pb.IncClickCountResponse, err error)
 	GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUrlsRequest) (resp *pb.GetAllUserUrlsResponse, err error)
