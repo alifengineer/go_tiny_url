@@ -97,8 +97,11 @@ func TestGetUserByPK(t *testing.T) {
 
 }
 
-func TestUpdateUser(t *testing.T){
-	tests := []struct{
+func TestUpdateUser(t *testing.T) {
+
+	dublicateUsername := fakeData.UserName()
+
+	tests := []struct {
 		name string
 		give *pb.UpdateUserRequest
 		want error
@@ -106,21 +109,30 @@ func TestUpdateUser(t *testing.T){
 		{
 			name: "SUCCESS: Update user",
 			give: &pb.UpdateUserRequest{
-				FirstName: "Said",
-				LastName:  "Amir",
+				FirstName: fakeData.FirstName(),
+				LastName:  fakeData.LastName(),
 				Phone:     fakeData.PhoneNumber(),
 				Username:  fakeData.UserName(),
 			},
 			want: nil,
-
+		},
+		{
+			name: "SUCCESS: Update user, Dublicate user",
+			give: &pb.UpdateUserRequest{
+				FirstName: fakeData.FirstName(),
+				LastName:  fakeData.LastName(),
+				Phone:     fakeData.PhoneNumber(),
+				Username:  dublicateUsername,
+			},
+			want: nil,
 		},
 		{
 			name: "ERROR: Update user, Dublicate user",
 			give: &pb.UpdateUserRequest{
-				FirstName: "Said",
-				LastName:  "Amir",
+				FirstName: fakeData.FirstName(),
+				LastName:  fakeData.LastName(),
 				Phone:     fakeData.PhoneNumber(),
-				Username:  fakeData.UserName(),
+				Username:  dublicateUsername,
 			},
 			want: nil,
 		},
@@ -198,7 +210,7 @@ func TestGetByeUsername(t *testing.T) {
 	}
 }
 
-func  TestResetPassword(t *testing.T){
+func TestResetPassword(t *testing.T) {
 
 	tests := []struct {
 		name string
@@ -208,7 +220,7 @@ func  TestResetPassword(t *testing.T){
 		{
 			name: "SUCCESS: Update password",
 			give: &pb.ResetPasswordRequest{
-				UserId: createUser(t).GetId(),
+				UserId:   createUser(t).GetId(),
 				Password: "12345678",
 			},
 			want: nil,
@@ -216,7 +228,7 @@ func  TestResetPassword(t *testing.T){
 		{
 			name: "ERROR: Update user, User not found",
 			give: &pb.ResetPasswordRequest{
-				UserId: createRandomId(t),
+				UserId:   createRandomId(t),
 				Password: "12345678",
 			},
 			want: pgx.ErrNoRows,
@@ -232,4 +244,3 @@ func  TestResetPassword(t *testing.T){
 		})
 	}
 }
-

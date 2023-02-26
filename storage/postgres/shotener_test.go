@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	pb "go_auth_api_gateway/genproto/auth_service"
+	"go_auth_api_gateway/pkg/utils"
 	"testing"
 	"time"
 
@@ -15,9 +16,15 @@ func createShortUrl(t *testing.T) (resp *pb.CreateShortUrlResponse) {
 
 	repo := NewShortenerRepo(db)
 
-	resp, err := repo.CreateShortUrl(context.Background(), &pb.CreateShortUrlRequest{
+	longUrl := fakeData.URL()
+	hash, err := utils.GetHash([]byte(longUrl))
+
+	assert.NoError(t, err)
+
+	resp, err = repo.CreateShortUrl(context.Background(), &pb.CreateShortUrlRequest{
 		UserId:     createUser(t).Id,
-		LongUrl:    "https://dave.cheney.net/2019/05/07/prefer-table-driven-tests",
+		LongUrl:    longUrl,
+		ShortUrl:   hash,
 		ExpireDate: time.Now().Add(time.Hour * 1).Format(time.RFC3339),
 	})
 
@@ -36,7 +43,8 @@ func TestCreateShortUrl(t *testing.T) {
 			name: "SUCCESS: Create short url",
 			give: &pb.CreateShortUrlRequest{
 				UserId:     createUser(t).Id,
-				LongUrl:    "https://dave.cheney.net/2019/05/07/prefer-table-driven-tests",
+				LongUrl:    fakeData.URL(),
+				ShortUrl:   fakeData.URL(),
 				ExpireDate: time.Now().Add(time.Hour * 1).Format(time.RFC3339),
 			},
 			wantErr: nil,
@@ -45,7 +53,8 @@ func TestCreateShortUrl(t *testing.T) {
 			name: "ERROR: Create short url, User not found",
 			give: &pb.CreateShortUrlRequest{
 				UserId:     createUser(t).Id,
-				LongUrl:    "https://dave.cheney.net/2019/05/07/prefer-table-driven-tests",
+				LongUrl:    fakeData.URL(),
+				ShortUrl:   fakeData.URL(),
 				ExpireDate: time.Now().Add(time.Hour * 1).Format(time.RFC3339),
 			},
 			wantErr: pgx.ErrNoRows,
