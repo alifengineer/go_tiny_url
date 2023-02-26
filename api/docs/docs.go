@@ -10,7 +10,6 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "https://udevs.io",
         "contact": {},
         "version": "{{.Version}}"
     },
@@ -3133,6 +3132,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/sigma/{hash}": {
+            "get": {
+                "description": "Handle Longer",
+                "tags": [
+                    "urls"
+                ],
+                "summary": "Handle Longer",
+                "operationId": "handle_longer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "short url hash",
+                        "name": "hash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Response Body",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/upsert-scope": {
             "post": {
                 "description": "Upsert Scope",
@@ -4162,6 +4200,136 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/short-url": {
+            "post": {
+                "description": "Create ShortUrl",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "urls"
+                ],
+                "summary": "Create ShortUrl",
+                "operationId": "create_short_url",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth_service.CreateShortUrlRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Response Body",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/auth_service.CreateShortUrlResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/short-url/{hash}": {
+            "get": {
+                "description": "Get ShortUrl",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "urls"
+                ],
+                "summary": "Get ShortUrl",
+                "operationId": "get_short_url",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth_service.GetShortUrlRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Response Body",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/auth_service.GetShortUrlResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -4459,6 +4627,49 @@ const docTemplate = `{
                 }
             }
         },
+        "auth_service.CreateShortUrlRequest": {
+            "type": "object",
+            "properties": {
+                "expire_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "long_url": {
+                    "type": "string"
+                },
+                "short_url": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth_service.CreateShortUrlResponse": {
+            "type": "object",
+            "properties": {
+                "craeted_at": {
+                    "type": "string"
+                },
+                "expire_date": {
+                    "type": "string"
+                },
+                "long_url": {
+                    "type": "string"
+                },
+                "short_url": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "auth_service.CreateUserRequest": {
             "type": "object",
             "properties": {
@@ -4610,6 +4821,40 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/auth_service.Scope"
                     }
+                }
+            }
+        },
+        "auth_service.GetShortUrlRequest": {
+            "type": "object",
+            "properties": {
+                "short_url": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth_service.GetShortUrlResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "expire_date": {
+                    "type": "string"
+                },
+                "long_url": {
+                    "type": "string"
+                },
+                "short_url": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },

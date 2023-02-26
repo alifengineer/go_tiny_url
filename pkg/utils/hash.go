@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	invalidHashError = "'%s' is not a valid short path."
-	invalidURLError  = "'%s' is not a valid URL."
+	InvalidHashError = "'%s' is not a valid short path."
+	InvalidURLError  = "'%s' is not a valid URL."
 )
 
 var (
@@ -17,15 +17,15 @@ var (
 	sessionToken = "session_token"
 )
 
-func isShortCorrect(link string) bool {
+func IsShortCorrect(link string) bool {
 	return short.FindStringIndex(link) != nil
 }
 
-func isLongCorrect(link string) bool {
+func IsLongCorrect(link string) bool {
 	return long.FindStringIndex(link) != nil
 }
 
-func getHash(s []byte) (string, error) {
+func GetHash(s []byte) (string, error) {
 	hasher := fnv.New32a()
 	_, err := hasher.Write(s)
 	if err != nil {

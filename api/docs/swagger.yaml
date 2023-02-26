@@ -189,6 +189,34 @@ definitions:
       parent_id:
         type: string
     type: object
+  auth_service.CreateShortUrlRequest:
+    properties:
+      expire_date:
+        type: string
+      id:
+        type: string
+      long_url:
+        type: string
+      short_url:
+        type: string
+      user_id:
+        type: string
+    type: object
+  auth_service.CreateShortUrlResponse:
+    properties:
+      craeted_at:
+        type: string
+      expire_date:
+        type: string
+      long_url:
+        type: string
+      short_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
   auth_service.CreateUserRequest:
     properties:
       active:
@@ -288,6 +316,28 @@ definitions:
         items:
           $ref: '#/definitions/auth_service.Scope'
         type: array
+    type: object
+  auth_service.GetShortUrlRequest:
+    properties:
+      short_url:
+        type: string
+      user_id:
+        type: string
+    type: object
+  auth_service.GetShortUrlResponse:
+    properties:
+      created_at:
+        type: string
+      expire_date:
+        type: string
+      long_url:
+        type: string
+      short_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
     type: object
   auth_service.GetUserListResponse:
     properties:
@@ -710,7 +760,6 @@ definitions:
 info:
   contact: {}
   description: This is a api gateway
-  termsOfService: https://udevs.io
 paths:
   /client:
     delete:
@@ -2462,6 +2511,29 @@ paths:
       summary: Get Scopes List
       tags:
       - Scope
+  /sigma/{hash}:
+    get:
+      description: Handle Longer
+      operationId: handle_longer
+      parameters:
+      - description: short url hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      responses:
+        "201":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Handle Longer
+      tags:
+      - urls
   /upsert-scope:
     post:
       consumes:
@@ -3042,4 +3114,78 @@ paths:
       summary: Send Message To User
       tags:
       - User
+  /v1/short-url:
+    post:
+      consumes:
+      - application/json
+      description: Create ShortUrl
+      operationId: create_short_url
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth_service.CreateShortUrlRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.CreateShortUrlResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create ShortUrl
+      tags:
+      - urls
+  /v1/short-url/{hash}:
+    get:
+      consumes:
+      - application/json
+      description: Get ShortUrl
+      operationId: get_short_url
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth_service.GetShortUrlRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetShortUrlResponse'
+              type: object
+      summary: Get ShortUrl
+      tags:
+      - urls
 swagger: "2.0"

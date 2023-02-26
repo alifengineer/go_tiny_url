@@ -70,10 +70,10 @@ func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequ
 			created_at,
 			updated_at
 		FROM urls
-		WHERE id = $1
+		WHERE short_url = $1
 	`
 
-	err = s.db.QueryRow(ctx, query, req.GetShortUrlId()).Scan(
+	err = s.db.QueryRow(ctx, query, req.GetShortUrl()).Scan(
 		&resp.LongUrl,
 		&resp.ShortUrl,
 		&resp.ExpireDate,

@@ -12,6 +12,7 @@ type ServiceManagerI interface {
 	PermissionService() auth_service.PermissionServiceClient
 	UserService() auth_service.UserServiceClient
 	SessionService() auth_service.SessionServiceClient
+	ShortenerService() auth_service.ShortenerServiceClient
 }
 
 type grpcClients struct {
@@ -19,6 +20,7 @@ type grpcClients struct {
 	permissionService auth_service.PermissionServiceClient
 	userService       auth_service.UserServiceClient
 	sessionService    auth_service.SessionServiceClient
+	shortenerService  auth_service.ShortenerServiceClient
 }
 
 func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
@@ -37,6 +39,7 @@ func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
 		permissionService: auth_service.NewPermissionServiceClient(connAuthService),
 		userService:       auth_service.NewUserServiceClient(connAuthService),
 		sessionService:    auth_service.NewSessionServiceClient(connAuthService),
+		shortenerService:  auth_service.NewShortenerServiceClient(connAuthService),
 	}, nil
 }
 
@@ -54,4 +57,8 @@ func (g *grpcClients) UserService() auth_service.UserServiceClient {
 
 func (g *grpcClients) SessionService() auth_service.SessionServiceClient {
 	return g.sessionService
+}
+
+func (g *grpcClients) ShortenerService() auth_service.ShortenerServiceClient {
+	return g.shortenerService
 }
