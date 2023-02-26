@@ -396,6 +396,46 @@ paths:
       summary: Handle Longer
       tags:
       - urls
+  /url-qrcode:
+    put:
+      consumes:
+      - application/json
+      description: Convert Qrcode
+      operationId: qr_code
+      parameters:
+      - description: tiny-url
+        in: query
+        name: tiny-url
+        required: true
+        type: string
+      produces:
+      - image/png
+      responses:
+        "200":
+          description: QR code image
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Url Convert Qrcode
+      tags:
+      - url
   /user:
     delete:
       consumes:

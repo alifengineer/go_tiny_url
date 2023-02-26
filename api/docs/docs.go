@@ -435,6 +435,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/url-qrcode": {
+            "put": {
+                "description": "Convert Qrcode",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "url"
+                ],
+                "summary": "Url Convert Qrcode",
+                "operationId": "qr_code",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tiny-url",
+                        "name": "tiny-url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "QR code image",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "put": {
                 "security": [
@@ -628,7 +697,29 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
+<<<<<<< HEAD
                         "description": "Success",
+=======
+                        "description": "User data",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+>>>>>>> e07af04ac632faa28a3555e437431b7e37b432ad
                         "schema": {
                             "allOf": [
                                 {

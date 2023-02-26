@@ -28,7 +28,6 @@ func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
 	}
 
 	return &grpcClients{
-
 		userService:      auth_service.NewUserServiceClient(connAuthService),
 		shortenerService: auth_service.NewShortenerServiceClient(connAuthService),
 	}, nil
