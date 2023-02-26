@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"go_auth_api_gateway/api/http"
+	"go_auth_api_gateway/config"
 	"go_auth_api_gateway/genproto/auth_service"
 	"strings"
 	"time"
@@ -32,7 +33,7 @@ func (h *Handler) hasAccess(c *gin.Context, result *auth_service.HasAccessModel)
 	}
 	accessToken := strArr[1]
 
-	claims, err := ExtractClaims(accessToken, h.cfg.SecretKey)
+	claims, err := ExtractClaims(accessToken, string(config.SigningKey))
 
 	if err != nil {
 		h.handleResponse(c, http.Forbidden, "no access")
