@@ -312,7 +312,7 @@ paths:
       parameters:
       - description: short url hash
         in: path
-        name: short-url
+        name: hash
         required: true
         type: string
       produces:
@@ -386,7 +386,7 @@ paths:
       parameters:
       - description: short url hash
         in: path
-        name: short-url
+        name: hash
         required: true
         type: string
       responses:

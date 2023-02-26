@@ -298,7 +298,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "short url hash",
-                        "name": "short-url",
+                        "name": "hash",
                         "in": "path",
                         "required": true
                     }
@@ -428,7 +428,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "short url hash",
-                        "name": "short-url",
+                        "name": "hash",
                         "in": "path",
                         "required": true
                     }
