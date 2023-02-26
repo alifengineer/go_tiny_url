@@ -130,7 +130,7 @@ func (h *Handler) HandleLonger(c *gin.Context) {
 // @Security ApiKeyAuth
 // GetAllUserUrls godoc
 // @ID get_all_user_urls
-// @Router /short-url/{user-id} [GET]
+// @Router /user/short-url/{user-id} [GET]
 // @Summary Get All User Urls
 // @Description Get All User Urls
 // @Tags urls

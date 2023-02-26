@@ -40,6 +40,7 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 		r.GET("/short-url/:hash", h.GetShortUrlData)
 		r.GET("sigma/:hash", h.HandleLonger)
 		r.PUT("/url-qrcode", h.UrlToQrcode)
+		r.GET("/user/short-url/:user-id", h.GetAllUserUrls)
 	}
 
 	// r.GET("/user", h.GetUserList)

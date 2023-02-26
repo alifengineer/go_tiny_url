@@ -391,53 +391,6 @@ paths:
       summary: Get ShortUrlData
       tags:
       - urls
-  /short-url/{user-id}:
-    get:
-      consumes:
-      - application/json
-      description: Get All User Urls
-      operationId: get_all_user_urls
-      parameters:
-      - description: user id
-        in: path
-        name: user-id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Response Body
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.GetAllUserUrlsResponse'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Get All User Urls
-      tags:
-      - urls
   /sigma/{hash}:
     get:
       description: Handle Longer
@@ -640,6 +593,53 @@ paths:
       summary: Update User
       tags:
       - User
+  /user/short-url/{user-id}:
+    get:
+      consumes:
+      - application/json
+      description: Get All User Urls
+      operationId: get_all_user_urls
+      parameters:
+      - description: user id
+        in: path
+        name: user-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetAllUserUrlsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get All User Urls
+      tags:
+      - urls
 securityDefinitions:
   ApiKeyAuth:
     in: header

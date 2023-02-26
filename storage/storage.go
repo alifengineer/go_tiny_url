@@ -4,6 +4,8 @@ import (
 	"context"
 	pb "go_auth_api_gateway/genproto/auth_service"
 	"time"
+
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type StorageI interface {
@@ -11,6 +13,7 @@ type StorageI interface {
 	User() UserRepoI
 	Shortener() ShortenerRepoI
 	RedisRepo() RedisRepoI
+	DB() *pgxpool.Pool
 }
 
 type UserRepoI interface {
