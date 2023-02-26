@@ -61,5 +61,7 @@ func (h *Handler) hasAccess(c *gin.Context, result *auth_service.HasAccessModel)
 		return false
 	}
 
+	result.UserId = userId.(string)
+
 	return true
 }
