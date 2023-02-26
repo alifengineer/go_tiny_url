@@ -445,7 +445,7 @@ paths:
       - ApiKeyAuth: []
       summary: Url Convert Qrcode
       tags:
-      - url
+      - Qrcode
   /user:
     delete:
       consumes:

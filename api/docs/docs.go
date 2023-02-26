@@ -470,7 +470,7 @@ const docTemplate = `{
                     "image/png"
                 ],
                 "tags": [
-                    "url"
+                    "Qrcode"
                 ],
                 "summary": "Url Convert Qrcode",
                 "operationId": "qr_code",

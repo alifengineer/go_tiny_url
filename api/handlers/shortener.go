@@ -166,7 +166,7 @@ func (h *Handler) GetAllUserUrls(c *gin.Context) {
 // @Router /url-qrcode [PUT]
 // @Summary Url Convert Qrcode
 // @Description Convert Qrcode
-// @Tags url
+// @Tags Qrcode
 // @Accept json
 // @Produce image/png
 // @Param tiny-url query string true "tiny-url"
