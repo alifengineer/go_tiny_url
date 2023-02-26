@@ -153,8 +153,8 @@ func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequ
 			user_id,
 			created_at,
 			updated_at,
-			click_count,
-			limit_click,
+			click_count::text,
+			limit_click::text,
 			(CASE
 				WHEN expire_date < now() OR click_count < limit_click THEN true
 				ELSE false
@@ -215,9 +215,6 @@ func (s *shortenerRepo) IncClickCount(ctx context.Context, req *pb.IncClickCount
 func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUrlsRequest) (resp *pb.GetAllUserUrlsResponse, err error) {
 
 	resp = &pb.GetAllUserUrlsResponse{}
-	var (
-		totalCount int64
-	)
 
 	query := `
 		SELECT
@@ -225,9 +222,9 @@ func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUr
 			long_url,
 			short_url,
 			expire_date,
-			click_count,
+			click_count::text,
 			count(1) OVER() AS total_count,
-			limit_click,
+			limit_click::text,
 			(CASE
 				WHEN expire_date < now() OR click_count < limit_click THEN true
 				ELSE false
@@ -273,7 +270,6 @@ func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUr
 		}
 
 		resp.Urls = append(resp.Urls, url)
-		resp.TotalCount = totalCount
 	}
 
 	return resp, nil
