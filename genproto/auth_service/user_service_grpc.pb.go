@@ -25,15 +25,12 @@ const _ = grpc.SupportPackageIsVersion7
 type UserServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*User, error)
 	GetUserByID(ctx context.Context, in *UserPrimaryKey, opts ...grpc.CallOption) (*User, error)
-	GetUserListByIDs(ctx context.Context, in *UserPrimaryKeyList, opts ...grpc.CallOption) (*GetUserListResponse, error)
+	// rpc GetUserListByIDs(UserPrimaryKeyList) returns (GetUserListResponse) {}
 	GetUserList(ctx context.Context, in *GetUserListRequest, opts ...grpc.CallOption) (*GetUserListResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*User, error)
 	DeleteUser(ctx context.Context, in *UserPrimaryKey, opts ...grpc.CallOption) (*empty.Empty, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*User, error)
-	SendMessageToEmail(ctx context.Context, in *SendMessageToEmailRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	AddUserRelation(ctx context.Context, in *AddUserRelationRequest, opts ...grpc.CallOption) (*UserRelation, error)
-	RemoveUserRelation(ctx context.Context, in *UserRelationPrimaryKey, opts ...grpc.CallOption) (*UserRelation, error)
-	UpsertUserInfo(ctx context.Context, in *UpsertUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
+	GetByCredentials(ctx context.Context, in *GetByCredentialsRequest, opts ...grpc.CallOption) (*User, error)
 }
 
 type userServiceClient struct {
@@ -56,15 +53,6 @@ func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserReques
 func (c *userServiceClient) GetUserByID(ctx context.Context, in *UserPrimaryKey, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
 	err := c.cc.Invoke(ctx, "/auth_service.UserService/GetUserByID", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) GetUserListByIDs(ctx context.Context, in *UserPrimaryKeyList, opts ...grpc.CallOption) (*GetUserListResponse, error) {
-	out := new(GetUserListResponse)
-	err := c.cc.Invoke(ctx, "/auth_service.UserService/GetUserListByIDs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,36 +95,9 @@ func (c *userServiceClient) ResetPassword(ctx context.Context, in *ResetPassword
 	return out, nil
 }
 
-func (c *userServiceClient) SendMessageToEmail(ctx context.Context, in *SendMessageToEmailRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/auth_service.UserService/SendMessageToEmail", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) AddUserRelation(ctx context.Context, in *AddUserRelationRequest, opts ...grpc.CallOption) (*UserRelation, error) {
-	out := new(UserRelation)
-	err := c.cc.Invoke(ctx, "/auth_service.UserService/AddUserRelation", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) RemoveUserRelation(ctx context.Context, in *UserRelationPrimaryKey, opts ...grpc.CallOption) (*UserRelation, error) {
-	out := new(UserRelation)
-	err := c.cc.Invoke(ctx, "/auth_service.UserService/RemoveUserRelation", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) UpsertUserInfo(ctx context.Context, in *UpsertUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error) {
-	out := new(UserInfo)
-	err := c.cc.Invoke(ctx, "/auth_service.UserService/UpsertUserInfo", in, out, opts...)
+func (c *userServiceClient) GetByCredentials(ctx context.Context, in *GetByCredentialsRequest, opts ...grpc.CallOption) (*User, error) {
+	out := new(User)
+	err := c.cc.Invoke(ctx, "/auth_service.UserService/GetByCredentials", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -149,15 +110,12 @@ func (c *userServiceClient) UpsertUserInfo(ctx context.Context, in *UpsertUserIn
 type UserServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*User, error)
 	GetUserByID(context.Context, *UserPrimaryKey) (*User, error)
-	GetUserListByIDs(context.Context, *UserPrimaryKeyList) (*GetUserListResponse, error)
+	// rpc GetUserListByIDs(UserPrimaryKeyList) returns (GetUserListResponse) {}
 	GetUserList(context.Context, *GetUserListRequest) (*GetUserListResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*User, error)
 	DeleteUser(context.Context, *UserPrimaryKey) (*empty.Empty, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*User, error)
-	SendMessageToEmail(context.Context, *SendMessageToEmailRequest) (*empty.Empty, error)
-	AddUserRelation(context.Context, *AddUserRelationRequest) (*UserRelation, error)
-	RemoveUserRelation(context.Context, *UserRelationPrimaryKey) (*UserRelation, error)
-	UpsertUserInfo(context.Context, *UpsertUserInfoRequest) (*UserInfo, error)
+	GetByCredentials(context.Context, *GetByCredentialsRequest) (*User, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -171,9 +129,6 @@ func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserReq
 func (UnimplementedUserServiceServer) GetUserByID(context.Context, *UserPrimaryKey) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserByID not implemented")
 }
-func (UnimplementedUserServiceServer) GetUserListByIDs(context.Context, *UserPrimaryKeyList) (*GetUserListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserListByIDs not implemented")
-}
 func (UnimplementedUserServiceServer) GetUserList(context.Context, *GetUserListRequest) (*GetUserListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserList not implemented")
 }
@@ -186,17 +141,8 @@ func (UnimplementedUserServiceServer) DeleteUser(context.Context, *UserPrimaryKe
 func (UnimplementedUserServiceServer) ResetPassword(context.Context, *ResetPasswordRequest) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResetPassword not implemented")
 }
-func (UnimplementedUserServiceServer) SendMessageToEmail(context.Context, *SendMessageToEmailRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendMessageToEmail not implemented")
-}
-func (UnimplementedUserServiceServer) AddUserRelation(context.Context, *AddUserRelationRequest) (*UserRelation, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddUserRelation not implemented")
-}
-func (UnimplementedUserServiceServer) RemoveUserRelation(context.Context, *UserRelationPrimaryKey) (*UserRelation, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveUserRelation not implemented")
-}
-func (UnimplementedUserServiceServer) UpsertUserInfo(context.Context, *UpsertUserInfoRequest) (*UserInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpsertUserInfo not implemented")
+func (UnimplementedUserServiceServer) GetByCredentials(context.Context, *GetByCredentialsRequest) (*User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByCredentials not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -243,24 +189,6 @@ func _UserService_GetUserByID_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetUserByID(ctx, req.(*UserPrimaryKey))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserService_GetUserListByIDs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserPrimaryKeyList)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).GetUserListByIDs(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/auth_service.UserService/GetUserListByIDs",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetUserListByIDs(ctx, req.(*UserPrimaryKeyList))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -337,74 +265,20 @@ func _UserService_ResetPassword_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_SendMessageToEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendMessageToEmailRequest)
+func _UserService_GetByCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetByCredentialsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).SendMessageToEmail(ctx, in)
+		return srv.(UserServiceServer).GetByCredentials(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth_service.UserService/SendMessageToEmail",
+		FullMethod: "/auth_service.UserService/GetByCredentials",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).SendMessageToEmail(ctx, req.(*SendMessageToEmailRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserService_AddUserRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddUserRelationRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).AddUserRelation(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/auth_service.UserService/AddUserRelation",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).AddUserRelation(ctx, req.(*AddUserRelationRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserService_RemoveUserRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRelationPrimaryKey)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).RemoveUserRelation(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/auth_service.UserService/RemoveUserRelation",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).RemoveUserRelation(ctx, req.(*UserRelationPrimaryKey))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserService_UpsertUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpsertUserInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).UpsertUserInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/auth_service.UserService/UpsertUserInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).UpsertUserInfo(ctx, req.(*UpsertUserInfoRequest))
+		return srv.(UserServiceServer).GetByCredentials(ctx, req.(*GetByCredentialsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -425,10 +299,6 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_GetUserByID_Handler,
 		},
 		{
-			MethodName: "GetUserListByIDs",
-			Handler:    _UserService_GetUserListByIDs_Handler,
-		},
-		{
 			MethodName: "GetUserList",
 			Handler:    _UserService_GetUserList_Handler,
 		},
@@ -445,20 +315,8 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_ResetPassword_Handler,
 		},
 		{
-			MethodName: "SendMessageToEmail",
-			Handler:    _UserService_SendMessageToEmail_Handler,
-		},
-		{
-			MethodName: "AddUserRelation",
-			Handler:    _UserService_AddUserRelation_Handler,
-		},
-		{
-			MethodName: "RemoveUserRelation",
-			Handler:    _UserService_RemoveUserRelation_Handler,
-		},
-		{
-			MethodName: "UpsertUserInfo",
-			Handler:    _UserService_UpsertUserInfo_Handler,
+			MethodName: "GetByCredentials",
+			Handler:    _UserService_GetByCredentials_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -23,7 +23,9 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type CreateShortUrlRequest struct {
 	UserId               string   `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	LongUrl              string   `protobuf:"bytes,2,opt,name=long_url,json=longUrl,proto3" json:"long_url,omitempty"`
-	Expiration           string   `protobuf:"bytes,3,opt,name=expiration,proto3" json:"expiration,omitempty"`
+	ExpireDate           string   `protobuf:"bytes,3,opt,name=expire_date,json=expireDate,proto3" json:"expire_date,omitempty"`
+	Id                   string   `protobuf:"bytes,4,opt,name=id,proto3" json:"id,omitempty"`
+	ShortUrl             string   `protobuf:"bytes,5,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -68,9 +70,23 @@ func (m *CreateShortUrlRequest) GetLongUrl() string {
 	return ""
 }
 
-func (m *CreateShortUrlRequest) GetExpiration() string {
+func (m *CreateShortUrlRequest) GetExpireDate() string {
 	if m != nil {
-		return m.Expiration
+		return m.ExpireDate
+	}
+	return ""
+}
+
+func (m *CreateShortUrlRequest) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *CreateShortUrlRequest) GetShortUrl() string {
+	if m != nil {
+		return m.ShortUrl
 	}
 	return ""
 }
@@ -78,7 +94,11 @@ func (m *CreateShortUrlRequest) GetExpiration() string {
 type CreateShortUrlResponse struct {
 	ShortUrl             string   `protobuf:"bytes,1,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
 	UserId               string   `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Expiration           string   `protobuf:"bytes,3,opt,name=expiration,proto3" json:"expiration,omitempty"`
+	ExpireDate           string   `protobuf:"bytes,3,opt,name=expire_date,json=expireDate,proto3" json:"expire_date,omitempty"`
+	LongUrl              string   `protobuf:"bytes,5,opt,name=long_url,json=longUrl,proto3" json:"long_url,omitempty"`
+	CraetedAt            string   `protobuf:"bytes,4,opt,name=craeted_at,json=craetedAt,proto3" json:"craeted_at,omitempty"`
+	UpdatedAt            string   `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Id                   string   `protobuf:"bytes,7,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -123,16 +143,44 @@ func (m *CreateShortUrlResponse) GetUserId() string {
 	return ""
 }
 
-func (m *CreateShortUrlResponse) GetExpiration() string {
+func (m *CreateShortUrlResponse) GetExpireDate() string {
 	if m != nil {
-		return m.Expiration
+		return m.ExpireDate
+	}
+	return ""
+}
+
+func (m *CreateShortUrlResponse) GetLongUrl() string {
+	if m != nil {
+		return m.LongUrl
+	}
+	return ""
+}
+
+func (m *CreateShortUrlResponse) GetCraetedAt() string {
+	if m != nil {
+		return m.CraetedAt
+	}
+	return ""
+}
+
+func (m *CreateShortUrlResponse) GetUpdatedAt() string {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return ""
+}
+
+func (m *CreateShortUrlResponse) GetId() string {
+	if m != nil {
+		return m.Id
 	}
 	return ""
 }
 
 type GetShortUrlRequest struct {
 	UserId               string   `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	ShortUrlId           string   `protobuf:"bytes,2,opt,name=short_url_id,json=shortUrlId,proto3" json:"short_url_id,omitempty"`
+	ShortUrl             string   `protobuf:"bytes,2,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -170,9 +218,9 @@ func (m *GetShortUrlRequest) GetUserId() string {
 	return ""
 }
 
-func (m *GetShortUrlRequest) GetShortUrlId() string {
+func (m *GetShortUrlRequest) GetShortUrl() string {
 	if m != nil {
-		return m.ShortUrlId
+		return m.ShortUrl
 	}
 	return ""
 }
@@ -180,8 +228,10 @@ func (m *GetShortUrlRequest) GetShortUrlId() string {
 type GetShortUrlResponse struct {
 	ShortUrl             string   `protobuf:"bytes,1,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
 	UserId               string   `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Expiration           string   `protobuf:"bytes,3,opt,name=expiration,proto3" json:"expiration,omitempty"`
+	ExpireDate           string   `protobuf:"bytes,3,opt,name=expire_date,json=expireDate,proto3" json:"expire_date,omitempty"`
 	LongUrl              string   `protobuf:"bytes,4,opt,name=long_url,json=longUrl,proto3" json:"long_url,omitempty"`
+	CreatedAt            string   `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt            string   `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -226,9 +276,9 @@ func (m *GetShortUrlResponse) GetUserId() string {
 	return ""
 }
 
-func (m *GetShortUrlResponse) GetExpiration() string {
+func (m *GetShortUrlResponse) GetExpireDate() string {
 	if m != nil {
-		return m.Expiration
+		return m.ExpireDate
 	}
 	return ""
 }
@@ -240,11 +290,113 @@ func (m *GetShortUrlResponse) GetLongUrl() string {
 	return ""
 }
 
+func (m *GetShortUrlResponse) GetCreatedAt() string {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return ""
+}
+
+func (m *GetShortUrlResponse) GetUpdatedAt() string {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return ""
+}
+
+type IncClickCountRequest struct {
+	ShortUrl             string   `protobuf:"bytes,1,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *IncClickCountRequest) Reset()         { *m = IncClickCountRequest{} }
+func (m *IncClickCountRequest) String() string { return proto.CompactTextString(m) }
+func (*IncClickCountRequest) ProtoMessage()    {}
+func (*IncClickCountRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6a64040fb43d257f, []int{4}
+}
+
+func (m *IncClickCountRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IncClickCountRequest.Unmarshal(m, b)
+}
+func (m *IncClickCountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IncClickCountRequest.Marshal(b, m, deterministic)
+}
+func (m *IncClickCountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IncClickCountRequest.Merge(m, src)
+}
+func (m *IncClickCountRequest) XXX_Size() int {
+	return xxx_messageInfo_IncClickCountRequest.Size(m)
+}
+func (m *IncClickCountRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_IncClickCountRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IncClickCountRequest proto.InternalMessageInfo
+
+func (m *IncClickCountRequest) GetShortUrl() string {
+	if m != nil {
+		return m.ShortUrl
+	}
+	return ""
+}
+
+type IncClickCountResponse struct {
+	ShortUrl             string   `protobuf:"bytes,1,opt,name=short_url,json=shortUrl,proto3" json:"short_url,omitempty"`
+	ClickCount           int64    `protobuf:"varint,2,opt,name=click_count,json=clickCount,proto3" json:"click_count,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *IncClickCountResponse) Reset()         { *m = IncClickCountResponse{} }
+func (m *IncClickCountResponse) String() string { return proto.CompactTextString(m) }
+func (*IncClickCountResponse) ProtoMessage()    {}
+func (*IncClickCountResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6a64040fb43d257f, []int{5}
+}
+
+func (m *IncClickCountResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IncClickCountResponse.Unmarshal(m, b)
+}
+func (m *IncClickCountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IncClickCountResponse.Marshal(b, m, deterministic)
+}
+func (m *IncClickCountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IncClickCountResponse.Merge(m, src)
+}
+func (m *IncClickCountResponse) XXX_Size() int {
+	return xxx_messageInfo_IncClickCountResponse.Size(m)
+}
+func (m *IncClickCountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_IncClickCountResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IncClickCountResponse proto.InternalMessageInfo
+
+func (m *IncClickCountResponse) GetShortUrl() string {
+	if m != nil {
+		return m.ShortUrl
+	}
+	return ""
+}
+
+func (m *IncClickCountResponse) GetClickCount() int64 {
+	if m != nil {
+		return m.ClickCount
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*CreateShortUrlRequest)(nil), "auth_service.CreateShortUrlRequest")
 	proto.RegisterType((*CreateShortUrlResponse)(nil), "auth_service.CreateShortUrlResponse")
 	proto.RegisterType((*GetShortUrlRequest)(nil), "auth_service.GetShortUrlRequest")
 	proto.RegisterType((*GetShortUrlResponse)(nil), "auth_service.GetShortUrlResponse")
+	proto.RegisterType((*IncClickCountRequest)(nil), "auth_service.IncClickCountRequest")
+	proto.RegisterType((*IncClickCountResponse)(nil), "auth_service.IncClickCountResponse")
 }
 
 func init() {
@@ -252,20 +404,27 @@ func init() {
 }
 
 var fileDescriptor_6a64040fb43d257f = []byte{
-	// 232 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2f, 0xce, 0xc8, 0x2f,
-	0x2a, 0x49, 0xcd, 0x4b, 0x2d, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x49, 0x2c, 0x2d,
-	0xc9, 0x88, 0x2f, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0x55, 0xca, 0xe6, 0x12, 0x75, 0x2e, 0x4a,
-	0x4d, 0x2c, 0x49, 0x0d, 0x06, 0x29, 0x0b, 0x2d, 0xca, 0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e,
-	0x11, 0x12, 0xe7, 0x62, 0x2f, 0x2d, 0x4e, 0x2d, 0x8a, 0xcf, 0x4c, 0x91, 0x60, 0x54, 0x60, 0xd4,
-	0xe0, 0x0c, 0x62, 0x03, 0x71, 0x3d, 0x53, 0x84, 0x24, 0xb9, 0x38, 0x72, 0xf2, 0xf3, 0xd2, 0xe3,
-	0x4b, 0x8b, 0x72, 0x24, 0x98, 0xc0, 0x32, 0xec, 0x20, 0x7e, 0x68, 0x51, 0x8e, 0x90, 0x1c, 0x17,
-	0x57, 0x6a, 0x45, 0x41, 0x66, 0x51, 0x62, 0x49, 0x66, 0x7e, 0x9e, 0x04, 0x33, 0x58, 0x12, 0x49,
-	0x44, 0x29, 0x8f, 0x4b, 0x0c, 0xdd, 0xb2, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x21, 0x69, 0x2e,
-	0x4e, 0xb0, 0x3b, 0xc1, 0xa6, 0x42, 0xec, 0xe3, 0x28, 0x86, 0x2a, 0x42, 0x76, 0x0a, 0x13, 0x8a,
-	0x53, 0x08, 0xd9, 0xe7, 0xcf, 0x25, 0xe4, 0x9e, 0x5a, 0x42, 0xb4, 0xcf, 0x14, 0xb8, 0x78, 0xe0,
-	0x8e, 0x40, 0x58, 0xc6, 0x05, 0x73, 0x87, 0x67, 0x8a, 0x52, 0x1b, 0x23, 0x97, 0x30, 0x8a, 0x89,
-	0xb4, 0x74, 0x3e, 0x4a, 0x48, 0xb3, 0xa0, 0x84, 0xb4, 0x93, 0x78, 0x94, 0x68, 0x7a, 0x6a, 0x1e,
-	0x38, 0x42, 0xf5, 0x91, 0xe3, 0x33, 0x89, 0x0d, 0x2c, 0x66, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff,
-	0x32, 0x27, 0x96, 0x60, 0xf7, 0x01, 0x00, 0x00,
+	// 339 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x93, 0xcf, 0x4a, 0xf3, 0x40,
+	0x14, 0xc5, 0x49, 0xfa, 0xff, 0xf6, 0xe3, 0x13, 0x46, 0x6b, 0x23, 0x22, 0x95, 0xac, 0x5c, 0xe9,
+	0xa2, 0x4f, 0x50, 0x2b, 0x48, 0x5d, 0x56, 0xba, 0x71, 0x13, 0xc6, 0xc9, 0xa5, 0x0d, 0x86, 0x4c,
+	0x9c, 0xb9, 0x23, 0xbe, 0x8a, 0x0f, 0xe4, 0x3b, 0xf8, 0x38, 0x32, 0xd3, 0x44, 0x3a, 0x45, 0x34,
+	0x2b, 0x97, 0x39, 0x27, 0xe7, 0x72, 0xce, 0x0f, 0x06, 0x0e, 0xf4, 0x46, 0x2a, 0xc2, 0x02, 0xd5,
+	0x65, 0xa9, 0x24, 0x49, 0xf6, 0x8f, 0x1b, 0xda, 0x24, 0x1a, 0xd5, 0x4b, 0x26, 0x30, 0x7e, 0x0b,
+	0x60, 0x34, 0x57, 0xc8, 0x09, 0xef, 0xed, 0x7f, 0x2b, 0x95, 0x2f, 0xf1, 0xd9, 0xa0, 0x26, 0x36,
+	0x86, 0x9e, 0xd1, 0xa8, 0x92, 0x2c, 0x8d, 0x82, 0xf3, 0xe0, 0x62, 0xb0, 0xec, 0xda, 0xcf, 0x45,
+	0xca, 0x4e, 0xa0, 0x9f, 0xcb, 0x62, 0x9d, 0x18, 0x95, 0x47, 0xa1, 0x73, 0x7a, 0xf6, 0x7b, 0xa5,
+	0x72, 0x36, 0x81, 0x21, 0xbe, 0x96, 0x99, 0xc2, 0x24, 0xe5, 0x84, 0x51, 0xcb, 0xb9, 0xb0, 0x95,
+	0x6e, 0x38, 0x21, 0xfb, 0x0f, 0x61, 0x96, 0x46, 0x6d, 0xa7, 0x87, 0x59, 0xca, 0x4e, 0x61, 0xe0,
+	0xfa, 0xb9, 0x63, 0x1d, 0x27, 0xf7, 0x75, 0x55, 0x24, 0xfe, 0x08, 0xe0, 0x78, 0xbf, 0x9b, 0x2e,
+	0x65, 0xa1, 0xd1, 0xcf, 0x05, 0x7e, 0x6e, 0xb7, 0x79, 0xe8, 0x35, 0xff, 0xb5, 0xde, 0xee, 0xb4,
+	0x8e, 0x3f, 0xed, 0x0c, 0x40, 0x28, 0x8e, 0x84, 0x69, 0xc2, 0xa9, 0x5a, 0x30, 0xa8, 0x94, 0x19,
+	0x59, 0xdb, 0x94, 0xf6, 0xaa, 0xb3, 0xbb, 0x5b, 0xbb, 0x52, 0x66, 0x54, 0xed, 0xee, 0xd5, 0xbb,
+	0xe3, 0x3b, 0x60, 0xb7, 0x48, 0x8d, 0x91, 0x7b, 0x73, 0xc3, 0x3d, 0x4c, 0xef, 0x01, 0x1c, 0x7a,
+	0xc7, 0xfe, 0x8e, 0x51, 0xfb, 0x1b, 0x46, 0x58, 0x43, 0xe8, 0xd4, 0x8c, 0x90, 0x37, 0x61, 0x14,
+	0x4f, 0xe1, 0x68, 0x51, 0x88, 0x79, 0x9e, 0x89, 0xa7, 0xb9, 0x34, 0x05, 0xd5, 0x54, 0x7e, 0xda,
+	0x11, 0xaf, 0x60, 0xb4, 0x17, 0x6a, 0xb2, 0x7e, 0x02, 0x43, 0x61, 0x23, 0x89, 0xb0, 0x19, 0x47,
+	0xa0, 0xb5, 0x04, 0xf1, 0x75, 0xe5, 0x7a, 0xfc, 0x30, 0x5a, 0x63, 0xe1, 0x1e, 0xcc, 0xd5, 0xee,
+	0x7b, 0x79, 0xec, 0x3a, 0x6d, 0xfa, 0x19, 0x00, 0x00, 0xff, 0xff, 0x45, 0x3c, 0xf5, 0x69, 0x57,
+	0x03, 0x00, 0x00,
 }

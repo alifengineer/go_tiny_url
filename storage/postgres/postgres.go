@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go_auth_api_gateway/config"
 	"go_auth_api_gateway/storage"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -22,8 +23,8 @@ type Store struct {
 	// session         storage.SessionRepoI
 	// rolePermission   storage.RolePermissionRepoI
 	shortener storage.ShortenerRepoI
-	redisRepo       storage.RedisRepoI
-
+	redisRepo storage.RedisRepoI
+	rdb       *redis.Pool
 }
 
 func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, error) {
@@ -143,10 +144,9 @@ func (s *Store) Shortener() storage.ShortenerRepoI {
 	return s.shortener
 }
 
-
 func (s *Store) RedisRepo() storage.RedisRepoI {
 	if s.redisRepo == nil {
-		s.redisRepo = NewRedisRepo(s.Rds)
+		s.redisRepo = NewRedisRepo(s.rdb)
 	}
 
 	return s.redisRepo
