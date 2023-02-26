@@ -14,7 +14,7 @@ services:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
       REDIS_PASSWORD: admin
-      REDIS_HOS: redis
+      REDIS_HOST: redis
       REDIS_PORT: 6379
       GIN_MODE: release
     volumes:
@@ -34,7 +34,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     ports:
-      - 5432:5432
+      - 6060:5432
   redis:
     image: redis:latest
     volumes:
