@@ -686,29 +686,7 @@
                 ],
                 "responses": {
                     "200": {
-<<<<<<< HEAD
-                        "description": "Success",
-=======
                         "description": "User data",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
->>>>>>> e07af04ac632faa28a3555e437431b7e37b432ad
                         "schema": {
                             "allOf": [
                                 {

@@ -540,7 +540,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Success
+          description: User data
           schema:
             allOf:
             - $ref: '#/definitions/http.Response'
