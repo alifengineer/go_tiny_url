@@ -1,1 +1,0 @@
-ALTER TABLE "integration" ADD CONSTRAINT integration_project_id_client_platform_id_key UNIQUE ("project_id", "client_platform_id");
