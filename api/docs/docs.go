@@ -189,6 +189,11 @@ const docTemplate = `{
         },
         "/short-url": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create ShortUrl",
                 "consumes": [
                     "application/json"
@@ -272,6 +277,11 @@ const docTemplate = `{
         },
         "/short-url/{hash}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get ShortUrl",
                 "consumes": [
                     "application/json"
@@ -317,6 +327,11 @@ const docTemplate = `{
         },
         "/short-url/{user-id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get All User Urls",
                 "consumes": [
                     "application/json"
@@ -398,6 +413,11 @@ const docTemplate = `{
         },
         "/sigma/{hash}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Handle Longer",
                 "tags": [
                     "urls"
@@ -437,6 +457,11 @@ const docTemplate = `{
         },
         "/url-qrcode": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Convert Qrcode",
                 "consumes": [
                     "application/json"
