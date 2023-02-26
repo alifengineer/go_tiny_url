@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
 	"go_auth_api_gateway/api"
 	"go_auth_api_gateway/api/handlers"
 	"go_auth_api_gateway/config"
@@ -16,8 +14,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	migrate "github.com/golang-migrate/migrate/v4"
-	pm "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
@@ -46,37 +42,6 @@ func main() {
 		log.Panic("postgres.NewPostgres", logger.Error(err))
 	}
 	defer pgStore.CloseDB()
-
-	db, err := sql.Open("postgres", fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=disable",
-		cfg.PostgresUser,
-		cfg.PostgresPassword,
-		cfg.PostgresHost,
-		cfg.PostgresPort,
-		cfg.PostgresDatabase,
-	))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	driver, err := pm.WithInstance(db, &pm.Config{})
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://app/migrations/postgres",
-		"postgres",
-		driver,
-	)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	err = m.Up()
-	if err != nil && err != migrate.ErrNoChange {
-		log.Fatal(err.Error())
-	}
 
 	svcs, err := client.NewGrpcClients(cfg)
 	if err != nil {
