@@ -5,7 +5,7 @@ import (
 	pb "go_auth_api_gateway/genproto/auth_service"
 	"go_auth_api_gateway/pkg/utils"
 
-	http "net/http"
+	"net/http"
 
 	http_status "go_auth_api_gateway/api/http"
 
