@@ -255,6 +255,130 @@ paths:
       summary: Register User
       tags:
       - User
+  /short-url:
+    post:
+      consumes:
+      - application/json
+      description: Create ShortUrl
+      operationId: create_short_url
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth_service.CreateShortUrlRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.CreateShortUrlResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create ShortUrl
+      tags:
+      - urls
+  /short-url/{hash}:
+    get:
+      consumes:
+      - application/json
+      description: Get ShortUrl
+      operationId: get_short_url
+      parameters:
+      - description: short url hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetShortUrlResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get ShortUrlData
+      tags:
+      - urls
+  /short-url/{user-id}:
+    get:
+      consumes:
+      - application/json
+      description: Get All User Urls
+      operationId: get_all_user_urls
+      parameters:
+      - description: user id
+        in: path
+        name: user-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetAllUserUrlsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get All User Urls
+      tags:
+      - urls
   /sigma/{hash}:
     get:
       description: Handle Longer
@@ -275,6 +399,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Handle Longer
       tags:
       - urls
@@ -315,9 +441,11 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Url Convert Qrcode
       tags:
-      - url
+      - Qrcode
   /user:
     delete:
       consumes:
@@ -453,124 +581,6 @@ paths:
       summary: Update User
       tags:
       - User
-  /v1/short-url:
-    post:
-      consumes:
-      - application/json
-      description: Create ShortUrl
-      operationId: create_short_url
-      parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/auth_service.CreateShortUrlRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Response Body
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.CreateShortUrlResponse'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      summary: Create ShortUrl
-      tags:
-      - urls
-  /v1/short-url/{hash}:
-    get:
-      consumes:
-      - application/json
-      description: Get ShortUrl
-      operationId: get_short_url
-      parameters:
-      - description: short url hash
-        in: path
-        name: hash
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Response Body
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.GetShortUrlResponse'
-              type: object
-      summary: Get ShortUrl
-      tags:
-      - urls
-  /v1/short-url/{user-id}:
-    get:
-      consumes:
-      - application/json
-      description: Get All User Urls
-      operationId: get_all_user_urls
-      parameters:
-      - description: user id
-        in: path
-        name: user-id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Response Body
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.GetAllUserUrlsResponse'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      summary: Get All User Urls
-      tags:
-      - urls
 securityDefinitions:
   ApiKeyAuth:
     in: header

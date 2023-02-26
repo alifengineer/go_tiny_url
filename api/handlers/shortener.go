@@ -14,9 +14,10 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
+// @Security ApiKeyAuth
 // CreateShortUrl godoc
 // @ID create_short_url
-// @Router /v1/short-url [POST]
+// @Router /short-url [POST]
 // @Summary Create ShortUrl
 // @Description Create ShortUrl
 // @Tags urls
@@ -50,10 +51,11 @@ func (h *Handler) CreateShortUrl(c *gin.Context) {
 	h.handleResponse(c, http_status.OK, resp)
 }
 
+// @Security ApiKeyAuth
 // GetShortUrl godoc
 // @ID get_short_url
-// @Router /v1/short-url/{hash} [GET]
-// @Summary Get ShortUrl
+// @Router /short-url/{hash} [GET]
+// @Summary Get ShortUrlData
 // @Description Get ShortUrl
 // @Tags urls
 // @Accept json
@@ -82,6 +84,7 @@ func (h *Handler) GetShortUrlData(c *gin.Context) {
 	h.handleResponse(c, http_status.OK, resp)
 }
 
+// @Security ApiKeyAuth
 // HandleLonger godoc
 // @ID handle_longer
 // @Router /sigma/{hash} [GET]
@@ -124,9 +127,10 @@ func (h *Handler) HandleLonger(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, resp.GetLongUrl())
 }
 
+// @Security ApiKeyAuth
 // GetAllUserUrls godoc
 // @ID get_all_user_urls
-// @Router /v1/short-url/{user-id} [GET]
+// @Router /short-url/{user-id} [GET]
 // @Summary Get All User Urls
 // @Description Get All User Urls
 // @Tags urls
@@ -156,12 +160,13 @@ func (h *Handler) GetAllUserUrls(c *gin.Context) {
 	h.handleResponse(c, http_status.OK, resp)
 }
 
+// @Security ApiKeyAuth
 // UrlToQrcode godoc
 // @ID qr_code
 // @Router /url-qrcode [PUT]
 // @Summary Url Convert Qrcode
 // @Description Convert Qrcode
-// @Tags url
+// @Tags Qrcode
 // @Accept json
 // @Produce image/png
 // @Param tiny-url query string true "tiny-url"

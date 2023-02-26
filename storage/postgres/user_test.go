@@ -1,60 +1,97 @@
 package postgres
 
-import "testing"
+import (
+	"context"
+	pb "go_auth_api_gateway/genproto/auth_service"
+	"testing"
 
-func CreateUser(t *testing.T) {
-	
+	"github.com/jackc/pgx/v4"
+	"github.com/stretchr/testify/assert"
+)
+
+func createUser(t *testing.T) (resp *pb.UserPrimaryKey) {
+
+	repo := NewUserRepo(db)
+
+	resp, err := repo.Create(context.Background(), &pb.CreateUserRequest{
+		FirstName: fakeData.FirstName(),
+		LastName:  fakeData.LastName(),
+		Phone:     fakeData.PhoneNumber(),
+		Username:  fakeData.UserName(),
+		Password:  "123456",
+	})
+	assert.NoError(t, err)
+	return resp
 }
 
-// func TestCreateInstallment(t *testing.T) {
-// 	katmid := createRandomId(t)
-// 	var tests = []struct {
-// 	  give *installment_service.Installment
-// 	  want error
-// 	}{
-// 	  {
-// 		&installment_service.Installment{
-// 		  MerchantBranchId: createMerchantBranch(t).Id,
-// 		  CustomerId:       CreateCustomer(t).Id,
-// 		  AgentId:          createAgent(t).Id,
-// 		  StageId:          createStage(t).Id,
-// 		  StatusId:         "aca171ab-e8ea-45eb-94e3-b3968b4ec225",
-// 		  FirstPaymentDate: "2020-11-20",
-// 		  TermMonth: &installment_service.Catalogue{
-// 			Guid:  createRandomId(t),
-// 			Label: fakeData.JobTitle(),
-// 		  },
-// 		  DownPayment:          fakeData.Rand.Float64(),
-// 		  TotalAmount:          fakeData.Rand.Float64(),
-// 		  MonthlyPaymentAmount: fakeData.Rand.Float64(),
-// 		  PaymeUrl:             fakeData.URL(),
-// 		  ContractNumber:       fakeData.CellPhoneNumber(),
-// 		  KatmId:               katmid,
-// 		},
-// 		nil,
-// 	  },
-// 	}
+func TestCreateUser(t *testing.T) {
 
-// 	installmentRepo := NewInstallmentRepo(db)
+	tests := []struct {
+		name    string
+		give    *pb.CreateUserRequest
+		wantErr error
+	}{
+		{
+			name: "SUCCESS: Create user",
+			give: &pb.CreateUserRequest{
+				FirstName: "Said",
+				LastName:  "Amir",
+				Phone:     fakeData.PhoneNumber(),
+				Username:  fakeData.UserName(),
+			},
+			wantErr: nil,
+		},
+		{
+			name: "ERROR: Create user, Dublicate phone",
+			give: &pb.CreateUserRequest{
+				FirstName: "Said",
+				LastName:  "Amir",
+				Phone:     fakeData.PhoneNumber(),
+				Username:  fakeData.UserName(),
+			},
+			wantErr: nil,
+		},
+	}
 
-// 	for i, tt := range tests {
-// 	  testname := fmt.Sprintf("Test %d", i+1)
-// 	  t.Run(testname, func(t *testing.T) {
-// 		resp, err := installmentRepo.Create(context.Background(), &installment_service.CreateInstallmentRequest{
-// 		  Installment: tt.give,
-// 		})
+	userRepo := NewUserRepo(db)
 
-// 		assert.NoError(t, err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := userRepo.Create(context.Background(), tt.give)
+			assert.NoError(t, err)
+		})
+	}
+}
 
-// 		fmt.Print("Create Installment------->")
+func TestGetUserByPK(t *testing.T) {
 
-// 		b, err := json.MarshalIndent(resp, "", "  ")
+	tests := []struct {
+		name string
+		give *pb.UserPrimaryKey
+		want error
+	}{
+		{
+			name: "SUCCESS: Get user",
+			give: &pb.UserPrimaryKey{
+				Id: createUser(t).GetId(),
+			},
+			want: nil,
+		},
+		{
+			name: "ERROR: Get user, User not found",
+			give: &pb.UserPrimaryKey{
+				Id: createRandomId(t),
+			},
+			want: pgx.ErrNoRows,
+		},
+	}
 
-// 		if !assert.Equal(t, tt.want, err) {
-// 		  t.Errorf("got %s, want %s", err, tt.want)
-// 		  return
-// 		}
-// 		fmt.Println(string(b))
-// 	  })
-// 	}
-//   }
+	userRepo := NewUserRepo(db)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := userRepo.GetByPK(context.Background(), tt.give)
+			assert.Equal(t, tt.want, err)
+		})
+	}
+}
