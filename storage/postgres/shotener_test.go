@@ -139,6 +139,8 @@ func TestGetShortUrl(t *testing.T) {
 
 func TestGetAllUserUrls(t *testing.T) {
 
+	createShortUrl(t)
+
 	tests := []struct {
 		name    string
 		give    *pb.GetAllUserUrlsRequest
@@ -153,6 +155,13 @@ func TestGetAllUserUrls(t *testing.T) {
 		},
 		{
 			name: "ERROR: Get User all urls, User not found",
+			give: &pb.GetAllUserUrlsRequest{
+				UserId: createUser(t).Id,
+			},
+			wantErr: pgx.ErrNoRows,
+		},
+		{
+			name: "SUCCESS: Create all short urls",
 			give: &pb.GetAllUserUrlsRequest{
 				UserId: createUser(t).Id,
 			},

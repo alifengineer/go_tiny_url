@@ -10,9 +10,11 @@ import (
 	"go_auth_api_gateway/storage"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/saidamir98/udevs_pkg/util"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -230,6 +232,9 @@ func (r *userRepo) Delete(ctx context.Context, pKey *pb.UserPrimaryKey) (rowsAff
 	}
 
 	rowsAffected = result.RowsAffected()
+	if rowsAffected == 0 {
+		return rowsAffected, pgx.ErrNoRows
+	}
 
 	return rowsAffected, err
 }
@@ -291,10 +296,13 @@ func (r *userRepo) ResetPassword(ctx context.Context, user *pb.ResetPasswordRequ
 	q, arr := helper.ReplaceQueryParams(query, params)
 	result, err := r.db.Exec(ctx, q, arr...)
 	if err != nil {
-		return 0, err
+		return 0, errors.Wrap(err, "error while updating user password")
 	}
 
 	rowsAffected = result.RowsAffected()
+	if rowsAffected == 0 {
+		return 0, pgx.ErrNoRows
+	}
 
 	return rowsAffected, err
 }

@@ -9,17 +9,23 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func createUser(t *testing.T) (resp *pb.UserPrimaryKey) {
+func createUser(t *testing.T) (resp *pb.User) {
 
 	repo := NewUserRepo(db)
 
-	resp, err := repo.Create(context.Background(), &pb.CreateUserRequest{
+	respCreateUser, err := repo.Create(context.Background(), &pb.CreateUserRequest{
 		FirstName: fakeData.FirstName(),
 		LastName:  fakeData.LastName(),
 		Phone:     fakeData.PhoneNumber(),
 		Username:  fakeData.UserName(),
 		Password:  "123456",
 	})
+
+	resp, err = repo.GetByPK(context.Background(), &pb.UserPrimaryKey{
+		Id: respCreateUser.GetId(),
+	})
+	assert.NoError(t, err)
+
 	assert.NoError(t, err)
 	return resp
 }
@@ -109,6 +115,7 @@ func TestUpdateUser(t *testing.T) {
 		{
 			name: "SUCCESS: Update user",
 			give: &pb.UpdateUserRequest{
+				Id:        createUser(t).GetId(),
 				FirstName: fakeData.FirstName(),
 				LastName:  fakeData.LastName(),
 				Phone:     fakeData.PhoneNumber(),
@@ -117,8 +124,9 @@ func TestUpdateUser(t *testing.T) {
 			want: nil,
 		},
 		{
-			name: "SUCCESS: Update user, Dublicate user",
+			name: "SUCCESS: Update user,",
 			give: &pb.UpdateUserRequest{
+				Id:        createUser(t).GetId(),
 				FirstName: fakeData.FirstName(),
 				LastName:  fakeData.LastName(),
 				Phone:     fakeData.PhoneNumber(),
@@ -129,6 +137,7 @@ func TestUpdateUser(t *testing.T) {
 		{
 			name: "ERROR: Update user, Dublicate user",
 			give: &pb.UpdateUserRequest{
+				Id:        createUser(t).GetId(),
 				FirstName: fakeData.FirstName(),
 				LastName:  fakeData.LastName(),
 				Phone:     fakeData.PhoneNumber(),
@@ -190,12 +199,12 @@ func TestGetByeUsername(t *testing.T) {
 	}{
 		{
 			name: "SUCCESS: Get user",
-			give: "JhonDoe",
+			give: createUser(t).GetUsername(),
 			want: nil,
 		},
 		{
 			name: "ERROR: Get user, User not found",
-			give: "JhonDoe",
+			give: fakeData.UserName(),
 			want: pgx.ErrNoRows,
 		},
 	}
@@ -241,6 +250,33 @@ func TestResetPassword(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := userRepo.ResetPassword(context.Background(), tt.give)
 			assert.Equal(t, tt.want, err)
+		})
+	}
+}
+
+func TestGetlist(t *testing.T) {
+
+	tests := []struct {
+		name string
+		give *pb.GetUserListRequest
+		want error
+	}{
+		{
+			name: "SUCCESS: Get user list",
+			give: &pb.GetUserListRequest{
+				Offset: 0,
+				Limit:  10,
+			},
+			want: nil,
+		},
+	}
+
+	userRepo := NewUserRepo(db)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := userRepo.GetList(context.Background(), tt.give)
+			assert.NoError(t, err)
 		})
 	}
 }
