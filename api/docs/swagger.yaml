@@ -1,30 +1,4 @@
 definitions:
-  auth_service.ClientPlatform:
-    properties:
-      id:
-        type: string
-      name:
-        type: string
-      project_id:
-        type: string
-      subdomain:
-        type: string
-    type: object
-  auth_service.ClientType:
-    properties:
-      confirm_by:
-        type: integer
-      id:
-        type: string
-      name:
-        type: string
-      project_id:
-        type: string
-      self_recover:
-        type: boolean
-      self_register:
-        type: boolean
-    type: object
   auth_service.CreateShortUrlRequest:
     properties:
       expire_date:
@@ -97,95 +71,6 @@ definitions:
       updated_at:
         type: string
       user_id:
-        type: string
-    type: object
-  auth_service.LoginResponse:
-    properties:
-      client_platform:
-        $ref: '#/definitions/auth_service.ClientPlatform'
-      client_type:
-        $ref: '#/definitions/auth_service.ClientType'
-      permissions:
-        items:
-          $ref: '#/definitions/auth_service.Permission'
-        type: array
-      role:
-        $ref: '#/definitions/auth_service.Role'
-      sessions:
-        items:
-          $ref: '#/definitions/auth_service.Session'
-        type: array
-      token:
-        $ref: '#/definitions/auth_service.Token'
-      user:
-        $ref: '#/definitions/auth_service.User'
-      user_found:
-        type: boolean
-    type: object
-  auth_service.Permission:
-    properties:
-      client_platform_id:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      parent_id:
-        type: string
-    type: object
-  auth_service.Role:
-    properties:
-      client_platform_id:
-        type: string
-      client_type_id:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      project_id:
-        type: string
-    type: object
-  auth_service.Session:
-    properties:
-      client_platform_id:
-        type: string
-      client_type_id:
-        type: string
-      created_at:
-        type: string
-      data:
-        type: string
-      expires_at:
-        type: string
-      id:
-        type: string
-      integration_id:
-        type: string
-      ip:
-        type: string
-      project_id:
-        type: string
-      role_id:
-        type: string
-      updated_at:
-        type: string
-      user_id:
-        type: string
-    type: object
-  auth_service.Token:
-    properties:
-      access_token:
-        type: string
-      created_at:
-        type: string
-      expires_at:
-        type: string
-      refresh_in_seconds:
-        type: integer
-      refresh_token:
-        type: string
-      updated_at:
         type: string
     type: object
   auth_service.UpdateUserRequest:
@@ -370,6 +255,124 @@ paths:
       summary: Register User
       tags:
       - User
+  /short-url:
+    post:
+      consumes:
+      - application/json
+      description: Create ShortUrl
+      operationId: create_short_url
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth_service.CreateShortUrlRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.CreateShortUrlResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create ShortUrl
+      tags:
+      - urls
+  /short-url/{hash}:
+    get:
+      consumes:
+      - application/json
+      description: Get ShortUrl
+      operationId: get_short_url
+      parameters:
+      - description: short url hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetShortUrlResponse'
+              type: object
+      summary: Get ShortUrl
+      tags:
+      - urls
+  /short-url/{user-id}:
+    get:
+      consumes:
+      - application/json
+      description: Get All User Urls
+      operationId: get_all_user_urls
+      parameters:
+      - description: user id
+        in: path
+        name: user-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Body
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetAllUserUrlsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get All User Urls
+      tags:
+      - urls
   /sigma/{hash}:
     get:
       description: Handle Longer
@@ -497,13 +500,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: User data
+          description: Success
           schema:
             allOf:
             - $ref: '#/definitions/http.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/auth_service.LoginResponse'
+                  type: string
               type: object
         "400":
           description: Bad Request
@@ -528,124 +531,6 @@ paths:
       summary: Update User
       tags:
       - User
-  /v1/short-url:
-    post:
-      consumes:
-      - application/json
-      description: Create ShortUrl
-      operationId: create_short_url
-      parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/auth_service.CreateShortUrlRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Response Body
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.CreateShortUrlResponse'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      summary: Create ShortUrl
-      tags:
-      - urls
-  /v1/short-url/{hash}:
-    get:
-      consumes:
-      - application/json
-      description: Get ShortUrl
-      operationId: get_short_url
-      parameters:
-      - description: short url hash
-        in: path
-        name: hash
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Response Body
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.GetShortUrlResponse'
-              type: object
-      summary: Get ShortUrl
-      tags:
-      - urls
-  /v1/short-url/{user-id}:
-    get:
-      consumes:
-      - application/json
-      description: Get All User Urls
-      operationId: get_all_user_urls
-      parameters:
-      - description: user id
-        in: path
-        name: user-id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Response Body
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.GetAllUserUrlsResponse'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      summary: Get All User Urls
-      tags:
-      - urls
 securityDefinitions:
   ApiKeyAuth:
     in: header

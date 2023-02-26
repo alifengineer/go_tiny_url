@@ -26,25 +26,20 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 	docs.SwaggerInfo.Schemes = []string{cfg.HTTPScheme}
 
 	r.Use(customCORSMiddleware())
+	r.Use(h.AuthMiddleware) // this middleware will be applied to all routes
+	{
+		r.PUT("/user", h.UpdateUser)
+		r.DELETE("/user", h.DeleteUser)
+		r.PUT("/user/reset-password", h.ResetPassword)
+		r.POST("/short-url", h.CreateShortUrl)
+		r.GET("/short-url/:hash", h.GetShortUrlData)
+		r.GET("sigma/:hash", h.HandleLonger)
+	}
 
 	r.POST("/register-user", h.RegisterUser)
 	r.POST("/login-user", h.LoginUser)
 	// r.GET("/user", h.GetUserList)
 	// r.GET("/user/:user-id", h.GetUserByID)
-	r.PUT("/user", h.UpdateUser)
-	r.DELETE("/user", h.DeleteUser)
-	r.PUT("/user/reset-password", h.ResetPassword)
-
-	v1 := r.Group("/v1")
-	{
-		v1.POST("/short-url", h.CreateShortUrl)
-		v1.GET("/short-url/:hash", h.GetShortUrlData)
-	}
-
-	sigma := r.Group("/sigma")
-	{
-		sigma.GET("/:hash", h.HandleLonger)
-	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return

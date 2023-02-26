@@ -14,7 +14,7 @@ import (
 
 // CreateShortUrl godoc
 // @ID create_short_url
-// @Router /v1/short-url [POST]
+// @Router /short-url [POST]
 // @Summary Create ShortUrl
 // @Description Create ShortUrl
 // @Tags urls
@@ -50,7 +50,7 @@ func (h *Handler) CreateShortUrl(c *gin.Context) {
 
 // GetShortUrl godoc
 // @ID get_short_url
-// @Router /v1/short-url/{hash} [GET]
+// @Router /short-url/{hash} [GET]
 // @Summary Get ShortUrl
 // @Description Get ShortUrl
 // @Tags urls
@@ -124,7 +124,7 @@ func (h *Handler) HandleLonger(c *gin.Context) {
 
 // GetAllUserUrls godoc
 // @ID get_all_user_urls
-// @Router /v1/short-url/{user-id} [GET]
+// @Router /short-url/{user-id} [GET]
 // @Summary Get All User Urls
 // @Description Get All User Urls
 // @Tags urls

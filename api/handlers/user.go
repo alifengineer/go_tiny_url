@@ -232,7 +232,7 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param password query string true "password"
-// @Success 200 {object} http.Response{data=auth_service.LoginResponse} "User data"
+// @Success 200 {object} http.Response{data=string} "Success"
 // @Response 400 {object} http.Response{data=string} "Bad Request"
 // @Failure 500 {object} http.Response{data=string} "Server Error"
 func (h *Handler) ResetPassword(c *gin.Context) {
