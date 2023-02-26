@@ -56,6 +56,12 @@ func (s *shortenerService) CreateShortUrl(ctx context.Context, req *pb.CreateSho
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	err = s.strg.RedisRepo().Create(ctx, hash, req.GetLongUrl(), config.RedisCacheTTL)
+	if err != nil {
+		s.log.Error("!!!CreateShortUrl--->", logger.Error(err))
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	return
 }
 
@@ -63,13 +69,22 @@ func (s *shortenerService) GetShortUrl(ctx context.Context, req *pb.GetShortUrlR
 
 	s.log.Info("---GetShortUrl--->", logger.Any("req", req))
 
-	resp, err = s.strg.Shortener().GetShortUrl(ctx, req)
+	ok, err := s.strg.RedisRepo().Get(ctx, req.GetShortUrl(), resp)
 	if err != nil {
-		s.log.Error("!!!GetShortUrl--->", logger.Error(err))
-		return nil, status.Error(codes.Internal, err.Error())
+		s.log.Error("!!!CreateShortUrl--->", logger.Error(err))
 	}
 
-	return
+	if !ok {
+		resp, err = s.strg.Shortener().GetShortUrl(ctx, req)
+		if err != nil {
+			s.log.Error("!!!GetShortUrl--->", logger.Error(err))
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+
+		err = s.strg.RedisRepo().Create(ctx, req.GetShortUrl(), resp.GetLongUrl(), config.RedisCacheTTL)
+	}
+
+	return resp, err
 }
 
 func (s *shortenerService) IncClickCount(ctx context.Context, req *pb.IncClickCountRequest) (resp *pb.IncClickCountResponse, err error) {
@@ -81,6 +96,38 @@ func (s *shortenerService) IncClickCount(ctx context.Context, req *pb.IncClickCo
 		s.log.Error("!!!IncClickCount--->", logger.Error(err))
 		return nil, status.Error(codes.Internal, err.Error())
 	}
+
+	return
+}
+
+func (s *shortenerService) HandleLongUrl(ctx context.Context, req *pb.HandleLongUrlRequest) (resp *pb.HandleLongUrlResponse, err error) {
+
+	s.log.Info("---HandlerLongUrl--->", logger.Any("req", req))
+
+	var (
+		longUrl string
+	)
+
+	ok, err := s.strg.RedisRepo().Get(ctx, req.GetShortUrl(), longUrl)
+	if err != nil {
+		s.log.Error("!!!CreateShortUrl--->", logger.Error(err))
+	}
+
+	if !ok {
+		respShortUrl, err := s.strg.Shortener().GetShortUrl(ctx, &pb.GetShortUrlRequest{ShortUrl: req.GetShortUrl()})
+		if err != nil {
+			s.log.Error("!!!HandlerLongUrl--->", logger.Error(err))
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+		longUrl = respShortUrl.GetLongUrl()
+
+		err = s.strg.RedisRepo().Create(ctx, req.GetShortUrl(), longUrl, config.RedisCacheTTL)
+		if err != nil {
+			s.log.Error("!!!HandlerLongUrl--->", logger.Error(err))
+		}
+	}
+
+	resp.LongUrl = longUrl
 
 	return
 }

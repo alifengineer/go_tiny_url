@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	pb "go_auth_api_gateway/genproto/auth_service"
+	"time"
 )
 
 var ErrorTheSameId = errors.New("cannot use the same uuid for 'id' and 'parent_id' fields")
@@ -33,7 +34,7 @@ type ShortenerRepoI interface {
 }
 
 type RedisRepoI interface {
-	Set(key, value string) error
-	Get(key string) (interface{}, error)
-	Exists(key string) (interface{}, error)
+	Create(ctx context.Context, key string, obj interface{}, ttl time.Duration) error
+	Get(ctx context.Context, key string, resp interface{}) (bool, error)
+	Delete(ctx context.Context, key string) error
 }

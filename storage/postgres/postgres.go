@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"go_auth_api_gateway/config"
 	"go_auth_api_gateway/storage"
+	"go_auth_api_gateway/storage/redis"
 
-	"github.com/gomodule/redigo/redis"
+	"github.com/go-redis/cache/v9"
 	"github.com/jackc/pgx/v4/pgxpool"
+	goRedis "github.com/redis/go-redis/v9"
 )
 
 type Store struct {
@@ -24,7 +26,7 @@ type Store struct {
 	// rolePermission   storage.RolePermissionRepoI
 	shortener storage.ShortenerRepoI
 	redisRepo storage.RedisRepoI
-	rdb       *redis.Pool
+	rdb       *cache.Cache
 }
 
 func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, error) {
@@ -47,8 +49,18 @@ func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, erro
 		return nil, err
 	}
 
+	redisClient := goRedis.NewClient(&goRedis.Options{
+		Addr:     fmt.Sprintf("%s:%d", cfg.RedisHost, cfg.RedisPort),
+		Password: cfg.RedisPassword,
+		DB:       0,
+	})
+	redisCache := cache.New(&cache.Options{
+		Redis: redisClient,
+	})
+
 	return &Store{
-		db: pool,
+		db:  pool,
+		rdb: redisCache,
 	}, err
 }
 
@@ -146,8 +158,9 @@ func (s *Store) Shortener() storage.ShortenerRepoI {
 
 func (s *Store) RedisRepo() storage.RedisRepoI {
 	if s.redisRepo == nil {
-		s.redisRepo = NewRedisRepo(s.rdb)
+		s.redisRepo = redis.NewredisRepo(s.rdb)
 	}
 
 	return s.redisRepo
 }
+	
