@@ -21,6 +21,7 @@ type StorageI interface {
 	RolePermission() RolePermissionRepoI
 	User() UserRepoI
 	Session() SessionRepoI
+	Shortener() ShortenerRepoI
 }
 
 type ClientPlatformRepoI interface {
@@ -135,4 +136,9 @@ type SessionRepoI interface {
 	DeleteExpiredIntegrationSessions(ctx context.Context, userID string) (rowsAffected int64, err error)
 	GetSessionListByUserID(ctx context.Context, userID string) (res *pb.GetSessionListResponse, err error)
 	GetSessionListByIntegrationID(ctx context.Context, userID string) (res *pb.GetSessionListResponse, err error)
+}
+
+type ShortenerRepoI interface {
+	CreateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (resp *pb.CreateShortUrlResponse, err error)
+	GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error)
 }
