@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS "users" (
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "deleted_at" INTEGER DEFAULT 0,
-    UNIQUE ("phone","deleted_at")
-    UNIQUE ("user_name","deleted_at")
+    UNIQUE ("phone","deleted_at"),
+    UNIQUE ("username","deleted_at")
 );
 
 CREATE TABLE IF NOT EXISTS "urls" (
