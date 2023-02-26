@@ -1,1 +1,0 @@
-ALTER TABLE "integration" DROP CONSTRAINT integration_project_id_client_platform_id_key;
