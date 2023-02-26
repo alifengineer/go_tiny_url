@@ -25,6 +25,8 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 
 	id := uuid.New().String()
 
+	resp = &pb.CreateShortUrlResponse{}
+
 	query := `
 		INSERT INTO urls (
 			id,
@@ -34,13 +36,14 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 			user_id,
 			created_at,
 			updated_at
+		RETURNING id
 		`
 
 	_, err = s.db.Exec(ctx, query,
 		id,
 		req.GetLongUrl(),
 		req.GetShortUrl(),
-		req.GetExpireDate(),
+		time.Now().Add(time.Hour*1).Format(time.RFC3339),
 		req.GetUserId(),
 		time.Now().UTC().Format(time.RFC3339),
 		time.Now().UTC().Format(time.RFC3339),
@@ -50,14 +53,25 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 		return nil, errors.Wrap(err, "error while inserting short url")
 	}
 
-	resp = &pb.CreateShortUrlResponse{
-		UserId:     req.GetUserId(),
-		LongUrl:    req.GetLongUrl(),
-		ShortUrl:   req.GetShortUrl(),
-		ExpireDate: req.GetExpireDate(),
+	err = s.db.QueryRow(
+		ctx,
+		`SELECT 
+			id,
+			long_url,
+			short_url,
+			expire_date		 
+		FROM urls WHERE id = $1`,
+	).Scan(
+		&resp.Id,
+		&resp.LongUrl,
+		&resp.ShortUrl,
+		&resp.ExpireDate,
+	)
+	if err != nil {
+		return nil, errors.Wrap(err, "error while getting short url")
 	}
 
-	return
+	return resp, nil
 }
 func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error) {
 
