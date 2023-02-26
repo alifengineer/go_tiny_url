@@ -874,10 +874,16 @@ const docTemplate = `{
         "auth_service.GetShortUrlResponse": {
             "type": "object",
             "properties": {
+                "click_count": {
+                    "type": "string"
+                },
                 "created_at": {
                     "type": "string"
                 },
                 "expire_date": {
+                    "type": "string"
+                },
+                "limit_click": {
                     "type": "string"
                 },
                 "long_url": {
@@ -887,6 +893,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                },
+                "url_status": {
                     "type": "string"
                 },
                 "user_id": {
@@ -929,6 +938,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "limit_click": {
+                    "type": "string"
+                },
                 "long_url": {
                     "type": "string"
                 },
@@ -936,6 +948,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                },
+                "url_status": {
                     "type": "string"
                 },
                 "user_id": {
