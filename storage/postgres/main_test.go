@@ -26,17 +26,6 @@ func createRandomId(t *testing.T) string {
 
 func TestMain(m *testing.M) {
 	cfg := config.Load()
-	// conf, err := pgxpool.ParseConfig(fmt.Sprintf(
-	//   "postgres://%s:%s@%s:%d/%s?sslmode=disable",
-	//   cfg.PostgresUser,
-	//   cfg.PostgresPassword,
-	//   cfg.PostgresHost,
-	//   cfg.PostgresPort,
-	//   cfg.PostgresDatabase,
-	// ))
-	// if err != nil {
-	//   panic(err)
-	// }
 
 	conf, err := pgxpool.ParseConfig(fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=disable",
