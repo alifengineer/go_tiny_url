@@ -17,41 +17,22 @@ services:
       - "5455:5432"
     environment:
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_DATABASE=shortener_db
+      - POSTGRES_DB=shortener_db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - REDIS_PASSWORD=admin
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
   go-app:
     build: .
     depends_on:
       - postgres-server
       - redis
-    expose:
-      - 5000
     ports:
-      - 5000:5000
+      - "8080:8080"
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_HOST=postgres-server
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_DATABASE=shortener_db
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.admin
-  #     PGADMIN_DEFAULT_PASSWORD: postgres
-  #   depends_on:
-  #     - postgres-server
-  #   ports:
-  #     - "5050:80"
-  #   restart: always
-  # nginx:
-  #   build: ./nginx
-  #   depends_on:
-  #     - "go-app"
-  #   ports:
-  #     - "80:80"
+      - REDIS_PASSWORD=admin
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379

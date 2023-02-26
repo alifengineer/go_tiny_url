@@ -87,3 +87,7 @@ func (s *Store) RedisRepo() storage.RedisRepoI {
 
 	return s.redisRepo
 }
+
+func (s *Store) DB() *pgxpool.Pool {
+	return s.db
+}
