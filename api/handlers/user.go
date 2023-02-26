@@ -8,9 +8,44 @@ import (
 	"github.com/saidamir98/udevs_pkg/util"
 
 	"github.com/gin-gonic/gin"
-
-	structpb "google.golang.org/protobuf/types/known/structpb"
 )
+
+
+// RegisterUser godoc
+// @ID register_user
+// @Router /register-user [POST]
+// @Summary Register User
+// @Description Register User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body auth_service.CreateUserRequest true "CreateUserRequestBody"
+// @Success 201 {object} http.Response{data=auth_service.UserWithAuth} "User data"
+// @Response 400 {object} http.Response{data=string} "Bad Request"
+// @Failure 500 {object} http.Response{data=string} "Server Error"
+func (h *Handler) RegisterUser(c *gin.Context) {
+	var user auth_service.CreateUserRequest
+
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		h.handleResponse(c, http.BadRequest, err.Error())
+		return
+	}
+
+	resp, err := h.services.UserService().CreateUser(
+		c.Request.Context(),
+		&user,
+	)
+
+	if err != nil {
+		h.handleResponse(c, http.GRPCError, err.Error())
+		return
+	}
+
+	
+
+	h.handleResponse(c, http.Created, resp)
+}
 
 // CreateUser godoc
 // @ID create_user
@@ -79,12 +114,9 @@ func (h *Handler) GetUserList(c *gin.Context) {
 	resp, err := h.services.UserService().GetUserList(
 		c.Request.Context(),
 		&auth_service.GetUserListRequest{
-			Limit:            int32(limit),
-			Offset:           int32(offset),
-			Search:           c.Query("search"),
-			ClientPlatformId: c.Query("client-platform-id"),
-			ClientTypeId:     c.Query("client-type-id"),
-			ProjectId:        c.Query("project-id"),
+			Limit:  int32(limit),
+			Offset: int32(offset),
+			Search: c.Query("search"),
 		},
 	)
 
@@ -200,118 +232,6 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 	h.handleResponse(c, http.NoContent, resp)
 }
 
-// AddUserRelation godoc
-// @ID add_user_relation
-// @Router /user-relation [POST]
-// @Summary Create UserRelation
-// @Description Create UserRelation
-// @Tags UserRelation
-// @Accept json
-// @Produce json
-// @Param user-relation body auth_service.AddUserRelationRequest true "AddUserRelationRequestBody"
-// @Success 201 {object} http.Response{data=auth_service.UserRelation} "UserRelation data"
-// @Response 400 {object} http.Response{data=string} "Bad Request"
-// @Failure 500 {object} http.Response{data=string} "Server Error"
-func (h *Handler) AddUserRelation(c *gin.Context) {
-	var user_relation auth_service.AddUserRelationRequest
-
-	err := c.ShouldBindJSON(&user_relation)
-	if err != nil {
-		h.handleResponse(c, http.BadRequest, err.Error())
-		return
-	}
-
-	resp, err := h.services.UserService().AddUserRelation(
-		c.Request.Context(),
-		&user_relation,
-	)
-
-	if err != nil {
-		h.handleResponse(c, http.GRPCError, err.Error())
-		return
-	}
-
-	h.handleResponse(c, http.Created, resp)
-}
-
-// RemoveUserRelation godoc
-// @ID delete_user_relation
-// @Router /user-relation [DELETE]
-// @Summary Delete UserRelation
-// @Description Get UserRelation
-// @Tags UserRelation
-// @Accept json
-// @Produce json
-// @Param user-relation body auth_service.UserRelationPrimaryKey true "UserRelationPrimaryKeyBody"
-// @Success 204
-// @Response 400 {object} http.Response{data=string} "Invalid Argument"
-// @Failure 500 {object} http.Response{data=string} "Server Error"
-func (h *Handler) RemoveUserRelation(c *gin.Context) {
-	var user_relation auth_service.UserRelationPrimaryKey
-
-	err := c.ShouldBindJSON(&user_relation)
-	if err != nil {
-		h.handleResponse(c, http.BadRequest, err.Error())
-		return
-	}
-
-	resp, err := h.services.UserService().RemoveUserRelation(
-		c.Request.Context(),
-		&user_relation,
-	)
-
-	if err != nil {
-		h.handleResponse(c, http.GRPCError, err.Error())
-		return
-	}
-
-	h.handleResponse(c, http.NoContent, resp)
-}
-
-// // UpsertUserInfo godoc
-// // @ID upsert_user_info
-// // @Router /upsert-user-info/{user-id} [POST]
-// // @Summary Upsert UserInfo
-// // @Description Upsert UserInfo
-// // @Tags UpsertUserInfo
-// // @Accept json
-// // @Produce json
-// // @Param data body structpb.Struct true "UpsertUserInfoRequestBody"
-// // @Param user-id path string true "user-id"
-// // @Success 201 {object} http.Response{data=auth_service.Role} "Role data"
-// // @Response 400 {object} http.Response{data=string} "Bad Request"
-// // @Failure 500 {object} http.Response{data=string} "Server Error"
-func (h *Handler) UpsertUserInfo(c *gin.Context) {
-	var data structpb.Struct
-	userID := c.Param("user-id")
-
-	if !util.IsValidUUID(userID) {
-		h.handleResponse(c, http.InvalidArgument, "user id is an invalid uuid")
-		return
-	}
-
-	err := c.ShouldBindJSON(&data)
-	if err != nil {
-		h.handleResponse(c, http.BadRequest, err.Error())
-		return
-	}
-
-	resp, err := h.services.UserService().UpsertUserInfo(
-		c.Request.Context(),
-		&auth_service.UpsertUserInfoRequest{
-			UserId: userID,
-			Data:   &data,
-		},
-	)
-
-	if err != nil {
-		h.handleResponse(c, http.GRPCError, err.Error())
-		return
-	}
-
-	h.handleResponse(c, http.Created, resp)
-}
-
 // UpdateUser godoc
 // @ID reset_password
 // @Router /user/reset-password [PUT]
@@ -333,7 +253,7 @@ func (h *Handler) ResetPassword(c *gin.Context) {
 		return
 	}
 
-	resp, err := h.services.UserService().ResetPassword(
+	_, err = h.services.UserService().ResetPassword(
 		c.Request.Context(),
 		&user,
 	)
@@ -342,51 +262,44 @@ func (h *Handler) ResetPassword(c *gin.Context) {
 		return
 	}
 
-	login, err := h.services.SessionService().Login(
-		c.Request.Context(),
-		&auth_service.LoginRequest{
-			Username: resp.GetLogin(),
-			Password: user.GetPassword(),
-		},
-	)
 	if err != nil {
 		h.handleResponse(c, http.GRPCError, err.Error())
 		return
 	}
 
-	h.handleResponse(c, http.OK, login)
+	h.handleResponse(c, http.OK, "")
 }
 
-// UpdateUser godoc
-// @ID send_message_to_user_email
-// @Router /user/send-message [POST]
-// @Summary Send Message To User
-// @Description Send Message to User Email
-// @Tags User
-// @Accept json
-// @Produce json
-// @Param send_message body auth_service.SendMessageToEmailRequest true "SendMessageToEmailRequestBody"
-// @Success 204
-// @Response 400 {object} http.Response{data=string} "Bad Request"
-// @Failure 500 {object} http.Response{data=string} "Server Error"
-func (h *Handler) SendMessageToUserEmail(c *gin.Context) {
-	var customerMessage auth_service.SendMessageToEmailRequest
+// // UpdateUser godoc
+// // @ID send_message_to_user_email
+// // @Router /user/send-message [POST]
+// // @Summary Send Message To User
+// // @Description Send Message to User Email
+// // @Tags User
+// // @Accept json
+// // @Produce json
+// // @Param send_message body auth_service.SendMessageToEmailRequest true "SendMessageToEmailRequestBody"
+// // @Success 204
+// // @Response 400 {object} http.Response{data=string} "Bad Request"
+// // @Failure 500 {object} http.Response{data=string} "Server Error"
+// func (h *Handler) SendMessageToUserEmail(c *gin.Context) {
+// 	var customerMessage auth_service.SendMessageToEmailRequest
 
-	err := c.ShouldBindJSON(&customerMessage)
-	if err != nil {
-		h.handleResponse(c, http.BadRequest, err.Error())
-		return
-	}
+// 	err := c.ShouldBindJSON(&customerMessage)
+// 	if err != nil {
+// 		h.handleResponse(c, http.BadRequest, err.Error())
+// 		return
+// 	}
 
-	resp, err := h.services.UserService().SendMessageToEmail(
-		c.Request.Context(),
-		&customerMessage,
-	)
+// 	resp, err := h.services.UserService().SendMessageToEmail(
+// 		c.Request.Context(),
+// 		&customerMessage,
+// 	)
 
-	if err != nil {
-		h.handleResponse(c, http.GRPCError, err.Error())
-		return
-	}
+// 	if err != nil {
+// 		h.handleResponse(c, http.GRPCError, err.Error())
+// 		return
+// 	}
 
-	h.handleResponse(c, http.NoContent, resp)
-}
+// 	h.handleResponse(c, http.NoContent, resp)
+// }
