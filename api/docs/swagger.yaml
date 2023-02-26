@@ -312,7 +312,7 @@ paths:
       parameters:
       - description: short url hash
         in: path
-        name: hash
+        name: short-url
         required: true
         type: string
       produces:
@@ -329,7 +329,7 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get ShortUrl
+      summary: Get ShortUrlData
       tags:
       - urls
   /short-url/{user-id}:
@@ -386,7 +386,7 @@ paths:
       parameters:
       - description: short url hash
         in: path
-        name: hash
+        name: short-url
         required: true
         type: string
       responses:

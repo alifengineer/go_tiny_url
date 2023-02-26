@@ -292,13 +292,13 @@ const docTemplate = `{
                 "tags": [
                     "urls"
                 ],
-                "summary": "Get ShortUrl",
+                "summary": "Get ShortUrlData",
                 "operationId": "get_short_url",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "short url hash",
-                        "name": "hash",
+                        "name": "short-url",
                         "in": "path",
                         "required": true
                     }
@@ -428,7 +428,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "short url hash",
-                        "name": "hash",
+                        "name": "short-url",
                         "in": "path",
                         "required": true
                     }

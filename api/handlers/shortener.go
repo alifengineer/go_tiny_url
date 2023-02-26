@@ -55,18 +55,18 @@ func (h *Handler) CreateShortUrl(c *gin.Context) {
 // GetShortUrl godoc
 // @ID get_short_url
 // @Router /short-url/{hash} [GET]
-// @Summary Get ShortUrl
+// @Summary Get ShortUrlData
 // @Description Get ShortUrl
 // @Tags urls
 // @Accept json
 // @Produce json
-// @Param hash path string true "short url hash"
+// @Param short-url path string true "short url hash"
 // @Success 201 {object} http.Response{data=auth_service.GetShortUrlResponse} "Response Body"
 func (h *Handler) GetShortUrlData(c *gin.Context) {
 
 	var req pb.GetShortUrlRequest
 
-	hash := c.Param("hash")
+	hash := c.Param("short-url")
 	if !utils.IsShortCorrect(hash) {
 		err := fmt.Errorf(utils.InvalidHashError, hash)
 		h.handleResponse(c, http_status.BadRequest, err.Error())
@@ -91,11 +91,11 @@ func (h *Handler) GetShortUrlData(c *gin.Context) {
 // @Summary Handle Longer
 // @Description Handle Longer
 // @Tags urls
-// @Param hash path string true "short url hash"
+// @Param short-url path string true "short url hash"
 // @Success 201 {object} http.Response{data=string} "Response Body"
 func (h *Handler) HandleLonger(c *gin.Context) {
 
-	url := c.Param("hash")
+	url := c.Param("short-url")
 	if !utils.IsShortCorrect(url) {
 		err := fmt.Errorf(utils.InvalidHashError, url)
 		h.handleResponse(c, http_status.BadRequest, err.Error())
