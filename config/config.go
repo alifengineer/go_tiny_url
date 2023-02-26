@@ -46,6 +46,8 @@ type Config struct {
 
 	AuthServiceHost string
 	AuthGRPCPort    string
+
+	ServiceHost string
 }
 
 // Load ...
@@ -84,6 +86,8 @@ func Load() Config {
 
 	config.AuthServiceHost = cast.ToString(getOrReturnDefaultValue("AUTH_SERVICE_HOST", "0.0.0.0"))
 	config.AuthGRPCPort = cast.ToString(getOrReturnDefaultValue("AUTH_GRPC_PORT", ":9103"))
+
+	config.ServiceHost = cast.ToString(getOrReturnDefaultValue("SERVICE_HOST", "http://localhost:8080/sigma/"))
 
 	return config
 }

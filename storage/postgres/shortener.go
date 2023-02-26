@@ -127,3 +127,26 @@ func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequ
 
 	return
 }
+
+func (s *shortenerRepo) IncClickCount(ctx context.Context, req *pb.IncClickCountRequest) (resp *pb.IncClickCountResponse, err error) {
+
+	resp = &pb.IncClickCountResponse{}
+
+	query := `
+		UPDATE urls
+		SET click_count = click_count + 1
+		WHERE short_url = $1
+	`
+
+	_, err = s.db.Exec(ctx, query, req.GetShortUrl())
+	if err != nil {
+		return nil, errors.Wrap(err, "error while incrementing click count")
+	}
+
+	err = s.db.QueryRow(ctx, `SELECT click_count FROM urls WHERE short_url = $1`, req.GetShortUrl()).Scan(&resp.ClickCount)
+	if err != nil {
+		return nil, errors.Wrap(err, "error while getting click count")
+	}
+
+	return resp, nil
+}

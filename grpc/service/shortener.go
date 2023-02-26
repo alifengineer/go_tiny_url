@@ -71,3 +71,16 @@ func (s *shortenerService) GetShortUrl(ctx context.Context, req *pb.GetShortUrlR
 
 	return
 }
+
+func (s *shortenerService) IncClickCount(ctx context.Context, req *pb.IncClickCountRequest) (resp *pb.IncClickCountResponse, err error) {
+
+	s.log.Info("---IncClickCount--->", logger.Any("req", req))
+
+	resp, err = s.strg.Shortener().IncClickCount(ctx, req)
+	if err != nil {
+		s.log.Error("!!!IncClickCount--->", logger.Error(err))
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return
+}

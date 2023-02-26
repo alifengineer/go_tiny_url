@@ -88,7 +88,7 @@ func (h *Handler) GetShortUrl(c *gin.Context) {
 // @Param hash path string true "short url hash"
 // @Success 201 {object} http.Response{data=string} "Response Body"
 func (h *Handler) HandleLonger(c *gin.Context) {
-
+	
 	url := c.Param("hash")
 	if !utils.IsShortCorrect(url) {
 		err := fmt.Errorf(utils.InvalidHashError, url)
@@ -99,6 +99,17 @@ func (h *Handler) HandleLonger(c *gin.Context) {
 	resp, err := h.services.ShortenerService().GetShortUrl(
 		c.Request.Context(),
 		&pb.GetShortUrlRequest{
+			ShortUrl: url,
+		},
+	)
+	if err != nil {
+		h.handleResponse(c, http_status.InternalServerError, err.Error())
+		return
+	}
+
+	_, err = h.services.ShortenerService().IncClickCount(
+		c.Request.Context(),
+		&pb.IncClickCountRequest{
 			ShortUrl: url,
 		},
 	)
