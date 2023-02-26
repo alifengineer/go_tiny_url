@@ -93,6 +93,9 @@ func Load() Config {
 
 	config.ServiceHost = cast.ToString(getOrReturnDefaultValue("SERVICE_HOST", "http://localhost:8080/sigma/"))
 
+	config.RedisPassword = cast.ToString(getOrReturnDefaultValue("REDIS_PASSWORD", "admin"))
+	config.RedisHost = cast.ToString(getOrReturnDefaultValue("REDIS_HOST", "0.0.0.0"))
+	config.RedisPort = cast.ToString(getOrReturnDefaultValue("REDIS_PORT", "6379"))
 	return config
 }
 

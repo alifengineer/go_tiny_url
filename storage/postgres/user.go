@@ -203,11 +203,11 @@ func (r *userRepo) Update(ctx context.Context, entity *pb.UpdateUserRequest) (ro
 		id = :id`
 
 	params := map[string]interface{}{
-		"id":         entity.Id,
-		"first_name": entity.FirstName,
-		"last_name":  entity.LastName,
-		"phone":      entity.Phone,
-		"username":   entity.Username,
+		"id":         entity.GetId(),
+		"first_name": entity.GetFirstName(),
+		"last_name":  entity.GetLastName(),
+		"phone":      entity.GetPhone(),
+		"username":   entity.GetUsername(),
 	}
 
 	q, arr := helper.ReplaceQueryParams(query, params)
