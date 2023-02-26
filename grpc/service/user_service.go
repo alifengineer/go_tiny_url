@@ -51,14 +51,6 @@ func (s *userService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	}
 	req.Password = hashedPassword
 
-	// emailRegex := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
-	// email := emailRegex.MatchString(req.Email)
-	// if !email {
-	// 	err = fmt.Errorf("email is not valid")
-	// 	s.log.Error("!!!CreateUser--->", logger.Error(err))
-	// 	return nil, err
-	// }
-
 	phoneRegex := regexp.MustCompile(`^[+]?(\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$`)
 	phone := phoneRegex.MatchString(req.Phone)
 	if !phone {
@@ -90,18 +82,6 @@ func (s *userService) GetUserByID(ctx context.Context, req *pb.UserPrimaryKey) (
 	return res, nil
 }
 
-// func (s *userService) GetUserListByIDs(ctx context.Context, req *pb.UserPrimaryKeyList) (*pb.GetUserListResponse, error) {
-// 	s.log.Info("---GetUserListByIDs--->", logger.Any("req", req))
-
-// 	res, err := s.strg.User().GetListByPKs(ctx, req)
-// 	if err != nil {
-// 		s.log.Error("!!!GetUserListByIDs--->", logger.Error(err))
-// 		return nil, status.Error(codes.NotFound, err.Error())
-// 	}
-
-// 	return res, err
-// }
-
 func (s *userService) GetUserList(ctx context.Context, req *pb.GetUserListRequest) (*pb.GetUserListResponse, error) {
 	s.log.Info("---GetUserList--->", logger.Any("req", req))
 
@@ -128,14 +108,6 @@ func (s *userService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 	if rowsAffected <= 0 {
 		return nil, status.Error(codes.InvalidArgument, "no rows were affected")
 	}
-
-	// emailRegex := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
-	// email := emailRegex.MatchString(req.Email)
-	// if !email {
-	// 	err = fmt.Errorf("email is not valid")
-	// 	s.log.Error("!!!UpdateUser--->", logger.Error(err))
-	// 	return nil, err
-	// }
 
 	phoneRegex := regexp.MustCompile(`^[+]?(\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$`)
 	phone := phoneRegex.MatchString(req.Phone)
@@ -186,15 +158,7 @@ func (s *userService) ResetPassword(ctx context.Context, req *pb.ResetPasswordRe
 		s.log.Error("!!!ResetPassword--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
-
-	tokenInfo, err := security.ParseClaims(req.Token, s.cfg.SecretKey)
-	if err != nil {
-		s.log.Error("!!!ResetPassword--->", logger.Error(err))
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
 	req.Password = hashedPassword
-	req.UserId = tokenInfo.ID
 
 	rowsAffected, err := s.strg.User().ResetPassword(ctx, req)
 	if err != nil {
@@ -222,7 +186,7 @@ func (s *userService) GetByCredentials(ctx context.Context, req *pb.GetByCredent
 		s.log.Error("!!!GetByCredentials--->GetByUsername", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
-	
+
 	check, err := security.ComparePassword(user.GetPassword(), req.GetPassword())
 	if err != nil {
 		s.log.Error("!!!GetByCredentials--->ComparePassword", logger.Error(err))
@@ -234,28 +198,3 @@ func (s *userService) GetByCredentials(ctx context.Context, req *pb.GetByCredent
 
 	return user, nil
 }
-
-// func (s *userService) SendMessageToEmail(ctx context.Context, req *pb.SendMessageToEmailRequest) (*emptypb.Empty, error) {
-// 	user, err := s.strg.User().GetByUsername(context.Background(), req.GetEmail())
-// 	if err != nil {
-// 		s.log.Error("error while getting user by email", logger.Error(err), logger.Any("req", req))
-// 		return nil, status.Error(codes.NotFound, err.Error())
-// 	}
-
-// 	m := map[string]interface{}{
-// 		"id": user.Id,
-// 	}
-
-// 	token, err := security.GenerateJWT(m, time.Hour*2, s.cfg.SecretKey)
-// 	if err != nil {
-// 		s.log.Error("error while getting generating token", logger.Error(err), logger.Any("req", req))
-// 		return nil, status.Error(codes.InvalidArgument, err.Error())
-// 	}
-
-// 	err = helper.SendEmail("Update Password", req.GetEmail(), req.GetBaseUrl(), token)
-// 	if err != nil {
-// 		s.log.Error("!!!SendUpdatePasswordUrlToEmail--->", logger.Error(err), logger.Any("req", req))
-// 		return nil, status.Error(codes.InvalidArgument, err.Error())
-// 	}
-// 	return &emptypb.Empty{}, nil
-// }

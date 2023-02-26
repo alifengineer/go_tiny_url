@@ -16,8 +16,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-<<<<<<< HEAD
-=======
         "/login-user": {
             "post": {
                 "description": "Login User",
@@ -106,7 +104,6 @@ const docTemplate = `{
                 }
             }
         },
->>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
         "/register-user": {
             "post": {
                 "description": "Register User",
@@ -190,7 +187,6 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
         "/sigma/{hash}": {
             "get": {
                 "description": "Handle Longer",
@@ -230,118 +226,13 @@ const docTemplate = `{
                 }
             }
         },
-=======
->>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
         "/user": {
-            "get": {
-                "description": "Get User List",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get User List",
-                "operationId": "get_user_list",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "offset",
-                        "name": "offset",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "search",
-                        "name": "search",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "client-platform-id",
-                        "name": "client-platform-id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "client-type-id",
-                        "name": "client-type-id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "project-id",
-                        "name": "project-id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "GetUserListResponseBody",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/auth_service.GetUserListResponse"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid Argument",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update User",
                 "consumes": [
                     "application/json"
@@ -422,8 +313,13 @@ const docTemplate = `{
                     }
                 }
             },
-            "post": {
-                "description": "Create User",
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get User",
                 "consumes": [
                     "application/json"
                 ],
@@ -433,22 +329,11 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Create User",
-                "operationId": "create_user",
-                "parameters": [
-                    {
-                        "description": "CreateUserRequestBody",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth_service.CreateUserRequest"
-                        }
-                    }
-                ],
+                "summary": "Delete User",
+                "operationId": "delete_user",
                 "responses": {
-                    "201": {
-                        "description": "User data",
+                    "200": {
+                        "description": "Succes",
                         "schema": {
                             "allOf": [
                                 {
@@ -458,7 +343,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/auth_service.User"
+                                            "type": "string"
                                         }
                                     }
                                 }
@@ -466,7 +351,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Invalid Argument",
                         "schema": {
                             "allOf": [
                                 {
@@ -506,6 +391,11 @@ const docTemplate = `{
         },
         "/user/reset-password": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Reset Password",
                 "consumes": [
                     "application/json"
@@ -520,13 +410,11 @@ const docTemplate = `{
                 "operationId": "reset_password",
                 "parameters": [
                     {
-                        "description": "ResetPasswordRequestBody",
-                        "name": "reset_password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth_service.ResetPasswordRequest"
-                        }
+                        "type": "string",
+                        "description": "password",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -550,151 +438,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{user-id}": {
-            "get": {
-                "description": "Get User By ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get User By ID",
-                "operationId": "get_user_by_id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user-id",
-                        "name": "user-id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "UserBody",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/auth_service.User"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid Argument",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/http.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Get User",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete User",
-                "operationId": "delete_user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user-id",
-                        "name": "user-id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Invalid Argument",
                         "schema": {
                             "allOf": [
                                 {
@@ -968,7 +711,17 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
+        "auth_service.GetByCredentialsRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "auth_service.GetShortUrlResponse": {
             "type": "object",
             "properties": {
@@ -988,30 +741,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
-=======
-        "auth_service.GetByCredentialsRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
                     "type": "string"
-                },
-                "username": {
->>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.GetUserListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth_service.User"
-                    }
                 }
             }
         },
@@ -1063,20 +793,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "parent_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_service.ResetPasswordRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }
@@ -1177,9 +893,6 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                },
                 "phone": {
                     "type": "string"
                 },
@@ -1263,6 +976,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

@@ -68,7 +68,13 @@ definitions:
       username:
         type: string
     type: object
-<<<<<<< HEAD
+  auth_service.GetByCredentialsRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   auth_service.GetShortUrlResponse:
     properties:
       created_at:
@@ -82,23 +88,7 @@ definitions:
       updated_at:
         type: string
       user_id:
-=======
-  auth_service.GetByCredentialsRequest:
-    properties:
-      password:
         type: string
-      username:
->>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
-        type: string
-    type: object
-  auth_service.GetUserListResponse:
-    properties:
-      count:
-        type: integer
-      users:
-        items:
-          $ref: '#/definitions/auth_service.User'
-        type: array
     type: object
   auth_service.LoginResponse:
     properties:
@@ -132,15 +122,6 @@ definitions:
       name:
         type: string
       parent_id:
-        type: string
-    type: object
-  auth_service.ResetPasswordRequest:
-    properties:
-      password:
-        type: string
-      token:
-        type: string
-      user_id:
         type: string
     type: object
   auth_service.Role:
@@ -206,8 +187,6 @@ definitions:
         type: string
       last_name:
         type: string
-      password:
-        type: string
       phone:
         type: string
       username:
@@ -267,8 +246,6 @@ info:
   contact: {}
   description: This is a api gateway
 paths:
-<<<<<<< HEAD
-=======
   /login-user:
     post:
       consumes:
@@ -319,7 +296,6 @@ paths:
       summary: Login User
       tags:
       - User
->>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
   /register-user:
     post:
       consumes:
@@ -366,7 +342,6 @@ paths:
       summary: Register User
       tags:
       - User
-<<<<<<< HEAD
   /sigma/{hash}:
     get:
       description: Handle Longer
@@ -390,50 +365,23 @@ paths:
       summary: Handle Longer
       tags:
       - urls
-=======
->>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
   /user:
-    get:
+    delete:
       consumes:
       - application/json
-      description: Get User List
-      operationId: get_user_list
-      parameters:
-      - description: offset
-        in: query
-        name: offset
-        type: integer
-      - description: limit
-        in: query
-        name: limit
-        type: integer
-      - description: search
-        in: query
-        name: search
-        type: string
-      - description: client-platform-id
-        in: query
-        name: client-platform-id
-        type: string
-      - description: client-type-id
-        in: query
-        name: client-type-id
-        type: string
-      - description: project-id
-        in: query
-        name: project-id
-        type: string
+      description: Get User
+      operationId: delete_user
       produces:
       - application/json
       responses:
         "200":
-          description: GetUserListResponseBody
+          description: Succes
           schema:
             allOf:
             - $ref: '#/definitions/http.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/auth_service.GetUserListResponse'
+                  type: string
               type: object
         "400":
           description: Invalid Argument
@@ -453,52 +401,9 @@ paths:
                 data:
                   type: string
               type: object
-      summary: Get User List
-      tags:
-      - User
-    post:
-      consumes:
-      - application/json
-      description: Create User
-      operationId: create_user
-      parameters:
-      - description: CreateUserRequestBody
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/auth_service.CreateUserRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: User data
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.User'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      summary: Create User
+      security:
+      - ApiKeyAuth: []
+      summary: Delete User
       tags:
       - User
     put:
@@ -543,89 +448,9 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Update User
-      tags:
-      - User
-  /user/{user-id}:
-    delete:
-      consumes:
-      - application/json
-      description: Get User
-      operationId: delete_user
-      parameters:
-      - description: user-id
-        in: path
-        name: user-id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: ""
-        "400":
-          description: Invalid Argument
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      summary: Delete User
-      tags:
-      - User
-    get:
-      consumes:
-      - application/json
-      description: Get User By ID
-      operationId: get_user_by_id
-      parameters:
-      - description: user-id
-        in: path
-        name: user-id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: UserBody
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/auth_service.User'
-              type: object
-        "400":
-          description: Invalid Argument
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "500":
-          description: Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/http.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-      summary: Get User By ID
       tags:
       - User
   /user/reset-password:
@@ -635,12 +460,11 @@ paths:
       description: Reset Password
       operationId: reset_password
       parameters:
-      - description: ResetPasswordRequestBody
-        in: body
-        name: reset_password
+      - description: password
+        in: query
+        name: password
         required: true
-        schema:
-          $ref: '#/definitions/auth_service.ResetPasswordRequest'
+        type: string
       produces:
       - application/json
       responses:
@@ -671,6 +495,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Update User
       tags:
       - User
@@ -747,4 +573,9 @@ paths:
       summary: Get ShortUrl
       tags:
       - urls
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

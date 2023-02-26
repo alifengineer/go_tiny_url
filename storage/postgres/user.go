@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"go_auth_api_gateway/config"
 	pb "go_auth_api_gateway/genproto/auth_service"
 	"go_auth_api_gateway/pkg/helper"
@@ -221,7 +222,7 @@ func (r *userRepo) Update(ctx context.Context, entity *pb.UpdateUserRequest) (ro
 }
 
 func (r *userRepo) Delete(ctx context.Context, pKey *pb.UserPrimaryKey) (rowsAffected int64, err error) {
-	query := `UPDATE "users" SET deleted_at = date_part('epoch', CURRENT_TIMESTAMP)::int`
+	query := `UPDATE "users" SET deleted_at = date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id = $1 and deleted_at=0`
 
 	result, err := r.db.Exec(ctx, query, pKey.Id)
 	if err != nil {
@@ -257,6 +258,7 @@ func (r *userRepo) GetByUsername(ctx context.Context, username string) (res *pb.
 		query = query + ` username = $1`
 	}
 
+	fmt.Println("qeury", query, username)
 	err = r.db.QueryRow(ctx, query, username).Scan(
 		&res.Id,
 		&res.FirstName,

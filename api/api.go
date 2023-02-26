@@ -12,6 +12,9 @@ import (
 
 // SetUpRouter godoc
 // @description This is a api gateway
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 	r = gin.New()
 
@@ -26,18 +29,11 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 
 	r.POST("/register-user", h.RegisterUser)
 	r.POST("/login-user", h.LoginUser)
-	r.POST("/user", h.CreateUser)
-	r.GET("/user", h.GetUserList)
-	r.GET("/user/:user-id", h.GetUserByID)
+	// r.GET("/user", h.GetUserList)
+	// r.GET("/user/:user-id", h.GetUserByID)
 	r.PUT("/user", h.UpdateUser)
-	r.DELETE("/user/:user-id", h.DeleteUser)
+	r.DELETE("/user", h.DeleteUser)
 	r.PUT("/user/reset-password", h.ResetPassword)
-	// r.POST("/user/send-message", h.SendMessageToUserEmail)
-
-	// r.POST("/user-relation", h.AddUserRelation)
-	// r.DELETE("/user-relation", h.RemoveUserRelation)
-
-	// r.POST("/upsert-user-info/:user-id", h.UpsertUserInfo)
 
 	v1 := r.Group("/v1")
 	{

@@ -23,9 +23,9 @@ func GenJWT(m map[interface{}]interface{}, signinigKey []byte) (access, refresh 
 		rClaims[key.(string)] = value
 	}
 
-	claims["iss"] = "user0"
+	claims["iss"] = "user"
 	claims["iat"] = time.Now().Unix()
-	claims["exp"] = time.Now().AddDate(0, 0, 15).Unix()
+	claims["exp"] = time.Now().AddDate(0, 0, 1).Unix()
 
 	rClaims["iss"] = "user"
 	rClaims["iat"] = time.Now().Unix()
