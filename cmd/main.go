@@ -60,7 +60,7 @@ func main() {
 		}
 	}()
 
-	h := handlers.NewHandler(cfg, log, svcs)
+	h := handlers.NewHandler(cfg, log, svcs, pgStore)
 
 	r := api.SetUpRouter(h, cfg)
 

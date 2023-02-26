@@ -4,6 +4,7 @@ import (
 	"go_auth_api_gateway/api/http"
 	"go_auth_api_gateway/config"
 	"go_auth_api_gateway/grpc/client"
+	"go_auth_api_gateway/storage"
 	"strconv"
 
 	"github.com/saidamir98/udevs_pkg/logger"
@@ -15,13 +16,15 @@ type Handler struct {
 	cfg      config.Config
 	log      logger.LoggerI
 	services client.ServiceManagerI
+	strg storage.StorageI
 }
 
-func NewHandler(cfg config.Config, log logger.LoggerI, svcs client.ServiceManagerI) Handler {
+func NewHandler(cfg config.Config, log logger.LoggerI, svcs client.ServiceManagerI, strg storage.StorageI) Handler {
 	return Handler{
 		cfg:      cfg,
 		log:      log,
 		services: svcs,
+		strg:  strg,
 	}
 }
 

@@ -1,15 +1,19 @@
 package handlers
 
 import (
+	"context"
+	"fmt"
 	"go_auth_api_gateway/api/http"
+	"go_auth_api_gateway/config"
 
 	"go_auth_api_gateway/genproto/auth_service"
+
+	"go_auth_api_gateway/pkg/jwt"
 
 	"github.com/saidamir98/udevs_pkg/util"
 
 	"github.com/gin-gonic/gin"
 )
-
 
 // RegisterUser godoc
 // @ID register_user
@@ -31,6 +35,17 @@ func (h *Handler) RegisterUser(c *gin.Context) {
 		h.handleResponse(c, http.BadRequest, err.Error())
 		return
 	}
+	if len(user.GetPassword()) < 6 {
+		h.handleResponse(c, http.BadRequest, "password must be at least 6 characters")
+		return
+	}
+
+	usr, _ := h.strg.User().GetByUsername(context.Background(), user.GetUsername())
+	fmt.Println("err", usr)
+	if usr.Id != "" {
+		h.handleResponse(c, http.GRPCError, "user already exists")
+		return
+	}
 
 	resp, err := h.services.UserService().CreateUser(
 		c.Request.Context(),
@@ -42,9 +57,72 @@ func (h *Handler) RegisterUser(c *gin.Context) {
 		return
 	}
 
-	
+	m := map[interface{}]interface{}{
+		"sub": resp.Id,
+	}
+	accessToken, refreshTokenk, err := jwt.GenJWT(m, config.SigningKey)
+	if err != nil {
+		h.handleResponse(c, http.GRPCError, err.Error())
+		return
+	}
 
-	h.handleResponse(c, http.Created, resp)
+	h.handleResponse(c, http.Created, &auth_service.UserWithAuth{
+		Id:           resp.GetId(),
+		Phone:        resp.GetPhone(),
+		FirstName:    resp.GetFirstName(),
+		LastName:     resp.GetLastName(),
+		Username:     resp.GetUsername(),
+		AccessToken:  accessToken,
+		RefreshToken: refreshTokenk,
+	})
+}
+
+// LoginUser godoc
+// @ID login_user
+// @Router /login-user [POST]
+// @Summary Login User
+// @Description Login User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param username query string true "username"
+// @Param password query string true "password"
+// @Success 201 {object} http.Response{data=auth_service.GetByCredentialsRequest} "User data"
+// @Response 400 {object} http.Response{data=string} "Bad Request"
+// @Failure 500 {object} http.Response{data=string} "Server Error"
+func (h *Handler) LoginUser(c *gin.Context) {
+
+	resp, err := h.services.UserService().GetByCredentials(
+		c.Request.Context(),
+		&auth_service.GetByCredentialsRequest{
+			Username: c.Query("username"),
+			Password: c.Query("password"),
+		},
+	)
+
+	if err != nil {
+		h.handleResponse(c, http.GRPCError, err.Error())
+		return
+	}
+
+	m := map[interface{}]interface{}{
+		"sub": resp.Id,
+	}
+	accessToken, refreshTokenk, err := jwt.GenJWT(m, config.SigningKey)
+	if err != nil {
+		h.handleResponse(c, http.GRPCError, err.Error())
+		return
+	}
+
+	h.handleResponse(c, http.Created, &auth_service.UserWithAuth{
+		Id:           resp.GetId(),
+		Phone:        resp.GetPhone(),
+		FirstName:    resp.GetFirstName(),
+		LastName:     resp.GetLastName(),
+		Username:     resp.GetUsername(),
+		AccessToken:  accessToken,
+		RefreshToken: refreshTokenk,
+	})
 }
 
 // CreateUser godoc

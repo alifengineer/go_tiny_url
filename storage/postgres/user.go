@@ -43,7 +43,7 @@ func (r *userRepo) Create(ctx context.Context, entity *pb.CreateUserRequest) (pK
 		$5,
 		$6,
 		$7,
-		$8,
+		$8
 	)`
 
 	uuid, err := uuid.NewRandom()
@@ -82,7 +82,7 @@ func (r *userRepo) GetByPK(ctx context.Context, pKey *pb.UserPrimaryKey) (res *p
 		TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
 	FROM
 		"users"
-	WHERE
+	WHERE deleted_at = 0 AND
 		id = $1`
 
 	err = r.db.QueryRow(ctx, query, pKey.Id).Scan(
@@ -102,88 +102,6 @@ func (r *userRepo) GetByPK(ctx context.Context, pKey *pb.UserPrimaryKey) (res *p
 	return res, nil
 }
 
-// func (r *userRepo) GetListByPKs(ctx context.Context, pKeys *pb.UserPrimaryKeyList) (res *pb.GetUserListResponse, err error) {
-// 	res = &pb.GetUserListResponse{}
-// 	query := `SELECT
-// 		id,
-// 		project_id,
-// 		client_platform_id,
-// 		client_type_id,
-// 		role_id,
-// 		name,
-// 		photo_url,
-// 		phone,
-// 		email,
-// 		login,
-// 		password,
-// 		active,
-// 		expires_at,
-// 		created_at,
-// 		updated_at
-// 	FROM
-// 		"user"
-// 	WHERE
-// 		id = ANY($1)`
-
-// 	rows, err := r.db.Query(ctx, query, pq.Array(pKeys.Ids))
-// 	if err != nil {
-// 		return res, err
-// 	}
-// 	defer rows.Close()
-
-// 	for rows.Next() {
-// 		var (
-// 			active    sql.NullInt32
-// 			expiresAt sql.NullString
-// 			createdAt sql.NullString
-// 			updatedAt sql.NullString
-// 		)
-
-// 		user := &pb.User{}
-// 		err = rows.Scan(
-// 			&user.Id,
-// 			&user.ProjectId,
-// 			&user.ClientPlatformId,
-// 			&user.ClientTypeId,
-// 			&user.RoleId,
-// 			&user.Name,
-// 			&user.PhotoUrl,
-// 			&user.Phone,
-// 			&user.Email,
-// 			&user.Login,
-// 			&user.Password,
-// 			&active,
-// 			&expiresAt,
-// 			&createdAt,
-// 			&updatedAt,
-// 		)
-
-// 		if err != nil {
-// 			return res, err
-// 		}
-
-// 		if active.Valid {
-// 			user.Active = active.Int32
-// 		}
-
-// 		if expiresAt.Valid {
-// 			user.ExpiresAt = expiresAt.String
-// 		}
-
-// 		if createdAt.Valid {
-// 			user.CreatedAt = createdAt.String
-// 		}
-
-// 		if updatedAt.Valid {
-// 			user.UpdatedAt = updatedAt.String
-// 		}
-
-// 		res.Users = append(res.Users, user)
-// 	}
-
-// 	return res, nil
-// }
-
 func (r *userRepo) GetList(ctx context.Context, queryParam *pb.GetUserListRequest) (res *pb.GetUserListResponse, err error) {
 	res = &pb.GetUserListResponse{}
 	params := make(map[string]interface{})
@@ -198,8 +116,8 @@ func (r *userRepo) GetList(ctx context.Context, queryParam *pb.GetUserListReques
 	TO_CHAR(created_at, ` + config.DatabaseQueryTimeLayout + `) AS created_at,
 	TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
 	FROM
-		"user"`
-	filter := " WHERE deleted_at IS NULL"
+		"users"`
+	filter := " WHERE deleted_at = 0"
 	order := " ORDER BY created_at"
 	arrangement := " DESC"
 	offset := " OFFSET 0"
@@ -220,7 +138,7 @@ func (r *userRepo) GetList(ctx context.Context, queryParam *pb.GetUserListReques
 		limit = " LIMIT :limit"
 	}
 
-	cQ := `SELECT count(1) FROM "user"` + filter
+	cQ := `SELECT count(1) FROM "users"` + filter
 	cQ, arr = helper.ReplaceQueryParams(cQ, params)
 	err = r.db.QueryRow(ctx, cQ, arr...).Scan(
 		&res.Count,
@@ -303,7 +221,7 @@ func (r *userRepo) Update(ctx context.Context, entity *pb.UpdateUserRequest) (ro
 }
 
 func (r *userRepo) Delete(ctx context.Context, pKey *pb.UserPrimaryKey) (rowsAffected int64, err error) {
-	query := `UPDATE "users" SET deleted_at = NOW()`
+	query := `UPDATE "users" SET deleted_at = date_part('epoch', CURRENT_TIMESTAMP)::int`
 
 	result, err := r.db.Exec(ctx, query, pKey.Id)
 	if err != nil {
@@ -319,23 +237,16 @@ func (r *userRepo) GetByUsername(ctx context.Context, username string) (res *pb.
 	res = &pb.User{}
 
 	query := `SELECT
-		id,
-		project_id,
-		client_platform_id,
-		client_type_id,
-		role_id,
-		name,
-		photo_url,
-		phone,
-		email,
-		login,
-		password,
-		active,
-		TO_CHAR(expires_at, ` + config.DatabaseQueryTimeLayout + `) AS expires_at,
-		TO_CHAR(created_at, ` + config.DatabaseQueryTimeLayout + `) AS created_at,
-		TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
+				id,
+				first_name,
+				last_name,
+				phone,
+				username,
+				password,
+				TO_CHAR(created_at, ` + config.DatabaseQueryTimeLayout + `) AS created_at,
+				TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
 	FROM
-		"user"
+		"users"
 	WHERE`
 
 	if util.IsValidEmail(username) {
@@ -343,12 +254,15 @@ func (r *userRepo) GetByUsername(ctx context.Context, username string) (res *pb.
 	} else if util.IsValidPhone(username) {
 		query = query + ` phone = $1`
 	} else {
-		query = query + ` login = $1`
+		query = query + ` username = $1`
 	}
 
 	err = r.db.QueryRow(ctx, query, username).Scan(
 		&res.Id,
+		&res.FirstName,
+		&res.LastName,
 		&res.Phone,
+		&res.Username,
 		&res.Password,
 		&res.CreatedAt,
 		&res.UpdatedAt,
@@ -361,7 +275,7 @@ func (r *userRepo) GetByUsername(ctx context.Context, username string) (res *pb.
 }
 
 func (r *userRepo) ResetPassword(ctx context.Context, user *pb.ResetPasswordRequest) (rowsAffected int64, err error) {
-	query := `UPDATE "user" SET
+	query := `UPDATE "users" SET
 		password = :password,
 		updated_at = now()
 	WHERE

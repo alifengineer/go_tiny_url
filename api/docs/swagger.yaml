@@ -38,6 +38,13 @@ definitions:
       username:
         type: string
     type: object
+  auth_service.GetByCredentialsRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   auth_service.GetUserListResponse:
     properties:
       count:
@@ -179,6 +186,29 @@ definitions:
       username:
         type: string
     type: object
+  auth_service.UserWithAuth:
+    properties:
+      accessToken:
+        type: string
+      created_at:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      refreshToken:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
   http.Response:
     properties:
       data: {}
@@ -191,6 +221,102 @@ info:
   contact: {}
   description: This is a api gateway
 paths:
+  /login-user:
+    post:
+      consumes:
+      - application/json
+      description: Login User
+      operationId: login_user
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User data
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetByCredentialsRequest'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Login User
+      tags:
+      - User
+  /register-user:
+    post:
+      consumes:
+      - application/json
+      description: Register User
+      operationId: register_user
+      parameters:
+      - description: CreateUserRequestBody
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth_service.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User data
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.UserWithAuth'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Register User
+      tags:
+      - User
   /user:
     get:
       consumes:
