@@ -1,11 +1,15 @@
 package handlers
 
 import (
+	"errors"
 	"go_auth_api_gateway/api/http"
 	"go_auth_api_gateway/config"
 	"go_auth_api_gateway/grpc/client"
+	"go_auth_api_gateway/storage"
 	"strconv"
+	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/saidamir98/udevs_pkg/logger"
 
 	"github.com/gin-gonic/gin"
@@ -15,13 +19,15 @@ type Handler struct {
 	cfg      config.Config
 	log      logger.LoggerI
 	services client.ServiceManagerI
+	strg     storage.StorageI
 }
 
-func NewHandler(cfg config.Config, log logger.LoggerI, svcs client.ServiceManagerI) Handler {
+func NewHandler(cfg config.Config, log logger.LoggerI, svcs client.ServiceManagerI, strg storage.StorageI) Handler {
 	return Handler{
 		cfg:      cfg,
 		log:      log,
 		services: svcs,
+		strg:     strg,
 	}
 }
 
@@ -68,4 +74,37 @@ func (h *Handler) getOffsetParam(c *gin.Context) (offset int, err error) {
 func (h *Handler) getLimitParam(c *gin.Context) (offset int, err error) {
 	offsetStr := c.DefaultQuery("limit", h.cfg.DefaultLimit)
 	return strconv.Atoi(offsetStr)
+}
+
+// ExtractClaims extracts claims from given token
+func ExtractClaims(tokenString string, tokenSecretKey string) (jwt.MapClaims, error) {
+	var (
+		token *jwt.Token
+		err   error
+	)
+
+	token, err = jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// check token signing method etc
+		return []byte(tokenSecretKey), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !(ok && token.Valid) {
+		return nil, errors.New("invalid token")
+	}
+
+	return claims, nil
+}
+
+// ExtractToken checks and returns token part of input string
+func ExtractToken(bearer string) (token string, err error) {
+	strArr := strings.Split(bearer, " ")
+	if len(strArr) == 2 {
+		return strArr[1], nil
+	}
+	return token, errors.New("wrong token format")
 }

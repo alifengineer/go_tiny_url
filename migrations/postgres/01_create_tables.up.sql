@@ -7,8 +7,9 @@ CREATE TABLE IF NOT EXISTS "users" (
     "password" VARCHAR(1000),
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    "deleted_at" TIMESTAMP,
-    UNIQUE ("phone","username","deleted_at")
+    "deleted_at" INTEGER DEFAULT 0,
+    UNIQUE ("phone","deleted_at"),
+    UNIQUE ("username","deleted_at")
 );
 
 CREATE TABLE IF NOT EXISTS "urls" (
@@ -19,7 +20,8 @@ CREATE TABLE IF NOT EXISTS "urls" (
     "expire_date" TIMESTAMP,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    "deleted_at" TIMESTAMP,
+    "deleted_at" INTEGER DEFAULT 0,
     "user_id" UUID REFERENCES "users" ("id"),
+    "limit_click" INTEGER DEFAULT 0,
     UNIQUE ("short_url","deleted_at")
 );

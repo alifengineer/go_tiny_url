@@ -1,8 +1,12 @@
-FROM golang:1.16 as builder
+FROM golang:1.18 as builder
+
+
+ENV $GOPATH=/go
+ENV $PATH=$GOPATH/bin:$PATH
 
 #
-RUN mkdir -p $GOPATH/src/github.dilmurodov/auth_api_gateway
-WORKDIR $GOPATH/src/github.dilmurodov/auth_api_gateway
+RUN mkdir -p $GOPATH/src/github.dilmurodov/app
+WORKDIR $GOPATH/src/github.dilmurodov/app
 
 # Copy the local package files to the container's workspace.
 COPY . ./
@@ -12,8 +16,8 @@ RUN export CGO_ENABLED=0 && \
     export GOOS=linux && \
     go mod vendor && \
     make build && \
-    mv ./bin/auth_api_gateway /
+    mv ./bin/app /
 
 FROM alpine
-COPY --from=builder auth_api_gateway .
-ENTRYPOINT ["/auth_api_gateway"]
+COPY --from=builder app .
+ENTRYPOINT ["/app"]

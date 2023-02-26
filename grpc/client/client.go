@@ -8,17 +8,13 @@ import (
 )
 
 type ServiceManagerI interface {
-	ClientService() auth_service.ClientServiceClient
-	PermissionService() auth_service.PermissionServiceClient
 	UserService() auth_service.UserServiceClient
-	SessionService() auth_service.SessionServiceClient
+	ShortenerService() auth_service.ShortenerServiceClient
 }
 
 type grpcClients struct {
-	clientService     auth_service.ClientServiceClient
-	permissionService auth_service.PermissionServiceClient
-	userService       auth_service.UserServiceClient
-	sessionService    auth_service.SessionServiceClient
+	userService      auth_service.UserServiceClient
+	shortenerService auth_service.ShortenerServiceClient
 }
 
 func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
@@ -32,26 +28,15 @@ func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
 	}
 
 	return &grpcClients{
-
-		clientService:     auth_service.NewClientServiceClient(connAuthService),
-		permissionService: auth_service.NewPermissionServiceClient(connAuthService),
-		userService:       auth_service.NewUserServiceClient(connAuthService),
-		sessionService:    auth_service.NewSessionServiceClient(connAuthService),
+		userService:      auth_service.NewUserServiceClient(connAuthService),
+		shortenerService: auth_service.NewShortenerServiceClient(connAuthService),
 	}, nil
-}
-
-func (g *grpcClients) ClientService() auth_service.ClientServiceClient {
-	return g.clientService
-}
-
-func (g *grpcClients) PermissionService() auth_service.PermissionServiceClient {
-	return g.permissionService
 }
 
 func (g *grpcClients) UserService() auth_service.UserServiceClient {
 	return g.userService
 }
 
-func (g *grpcClients) SessionService() auth_service.SessionServiceClient {
-	return g.sessionService
+func (g *grpcClients) ShortenerService() auth_service.ShortenerServiceClient {
+	return g.shortenerService
 }
