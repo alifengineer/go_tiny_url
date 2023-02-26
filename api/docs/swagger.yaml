@@ -60,15 +60,21 @@ definitions:
     type: object
   auth_service.GetShortUrlResponse:
     properties:
+      click_count:
+        type: string
       created_at:
         type: string
       expire_date:
+        type: string
+      limit_click:
         type: string
       long_url:
         type: string
       short_url:
         type: string
       updated_at:
+        type: string
+      url_status:
         type: string
       user_id:
         type: string
@@ -96,11 +102,15 @@ definitions:
         type: string
       id:
         type: string
+      limit_click:
+        type: string
       long_url:
         type: string
       short_url:
         type: string
       updated_at:
+        type: string
+      url_status:
         type: string
       user_id:
         type: string

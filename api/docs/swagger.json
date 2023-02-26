@@ -863,10 +863,16 @@
         "auth_service.GetShortUrlResponse": {
             "type": "object",
             "properties": {
+                "click_count": {
+                    "type": "string"
+                },
                 "created_at": {
                     "type": "string"
                 },
                 "expire_date": {
+                    "type": "string"
+                },
+                "limit_click": {
                     "type": "string"
                 },
                 "long_url": {
@@ -876,6 +882,9 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                },
+                "url_status": {
                     "type": "string"
                 },
                 "user_id": {
@@ -918,6 +927,9 @@
                 "id": {
                     "type": "string"
                 },
+                "limit_click": {
+                    "type": "string"
+                },
                 "long_url": {
                     "type": "string"
                 },
@@ -925,6 +937,9 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                },
+                "url_status": {
                     "type": "string"
                 },
                 "user_id": {

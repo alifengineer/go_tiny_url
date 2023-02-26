@@ -28,6 +28,10 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 		expireDate sql.NullString
 	)
 
+	if req.GetExpireDate() == "" {
+		req.ExpireDate = time.Now().Add(time.Hour * 1000).Format(time.RFC3339)
+	}
+
 	id := uuid.New().String()
 
 	resp = &pb.CreateShortUrlResponse{}
@@ -56,7 +60,7 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 		id,
 		req.GetLongUrl(),
 		req.GetShortUrl(),
-		time.Now().Add(time.Hour*1).Format(time.RFC3339),
+		req.GetExpireDate(),
 		req.GetUserId(),
 		time.Now().UTC().Format(time.RFC3339),
 		time.Now().UTC().Format(time.RFC3339),
@@ -88,7 +92,7 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 
 	return resp, nil
 }
-func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error) {
+func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest, onlyExpired bool) (resp *pb.GetShortUrlResponse, err error) {
 
 	resp = &pb.GetShortUrlResponse{}
 
@@ -96,8 +100,13 @@ func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequ
 		expireDate sql.NullString
 		createdAt  sql.NullString
 		updatedAt  sql.NullString
+		filter     string
+		status     bool
 	)
 
+	if onlyExpired {
+		filter += " AND expire_date < now() OR click_count < limit_click "
+	}
 	query := `
 		SELECT
 			long_url,
@@ -105,10 +114,15 @@ func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequ
 			expire_date,
 			user_id,
 			created_at,
-			updated_at
+			updated_at,
+			click_count,
+			limit_click,
+			(CASE
+				WHEN expire_date < now() OR click_count < limit_click THEN true
+				ELSE false
+				END) AS is_expired
 		FROM urls
-		WHERE short_url = $1
-	`
+		WHERE short_url = $1 ` + filter + ``
 
 	err = s.db.QueryRow(ctx, query, req.GetShortUrl()).Scan(
 		&resp.LongUrl,
@@ -117,7 +131,16 @@ func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequ
 		&resp.UserId,
 		&createdAt,
 		&updatedAt,
+		&resp.ClickCount,
+		&resp.LimitClick,
+		&status,
 	)
+
+	if status {
+		resp.UrlStatus = "Url is expired"
+	} else {
+		resp.UrlStatus = "Url is not expired"
+	}
 	if err != nil {
 		return nil, errors.Wrap(err, "error while getting short url")
 	}
@@ -165,7 +188,12 @@ func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUr
 			short_url,
 			expire_date,
 			click_count,
-			count(1) OVER() AS total_count
+			count(1) OVER() AS total_count,
+			limit_click,
+			(CASE
+				WHEN expire_date < now() OR click_count < limit_click THEN true
+				ELSE false
+				END) AS is_expired
 		FROM urls
 		WHERE user_id = $1
 	`
@@ -180,6 +208,7 @@ func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUr
 	for rows.Next() {
 		var (
 			expireDate sql.NullString
+			status     bool
 		)
 
 		url := &pb.UrlData{}
@@ -190,12 +219,20 @@ func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUr
 			&url.ShortUrl,
 			&expireDate,
 			&url.ClickCount,
+			&resp.TotalCount,
+			&url.LimitClick,
+			&status,
 		)
 		if err != nil {
 			return nil, errors.Wrap(err, "error while scanning user urls")
 		}
 
 		url.ExpireDate = expireDate.String
+		if status {
+			url.UrlStatus = "Url is expired"
+		} else {
+			url.UrlStatus = "Url is not expired"
+		}
 
 		resp.Urls = append(resp.Urls, url)
 		resp.TotalCount = totalCount

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"go_auth_api_gateway/config"
 	pb "go_auth_api_gateway/genproto/auth_service"
@@ -75,7 +76,7 @@ func (s *shortenerService) GetShortUrl(ctx context.Context, req *pb.GetShortUrlR
 	}
 
 	if !ok {
-		resp, err = s.strg.Shortener().GetShortUrl(ctx, req)
+		resp, err = s.strg.Shortener().GetShortUrl(ctx, req, false)
 		if err != nil {
 			s.log.Error("!!!GetShortUrl--->", logger.Error(err))
 			return nil, status.Error(codes.Internal, err.Error())
@@ -114,7 +115,12 @@ func (s *shortenerService) HandleLongUrl(ctx context.Context, req *pb.HandleLong
 	}
 
 	if !ok {
-		respShortUrl, err := s.strg.Shortener().GetShortUrl(ctx, &pb.GetShortUrlRequest{ShortUrl: req.GetShortUrl()})
+		respShortUrl, err := s.strg.Shortener().GetShortUrl(ctx, &pb.GetShortUrlRequest{ShortUrl: req.GetShortUrl()}, true)
+		if err == sql.ErrNoRows {
+			s.log.Error("!!!HandlerLongUrl--->", logger.Error(err))
+			return nil, status.Error(codes.NotFound, "Url not found or expired please check your expire date or click count")
+
+		}
 		if err != nil {
 			s.log.Error("!!!HandlerLongUrl--->", logger.Error(err))
 			return nil, status.Error(codes.Internal, err.Error())
@@ -136,6 +142,7 @@ func (s *shortenerService) GetAllUserUrls(ctx context.Context, req *pb.GetAllUse
 
 	s.log.Info("---GetAllUserUrls--->", logger.Any("req", req))
 
+	fmt.Println("req", req)
 	resp, err = s.strg.Shortener().GetAllUserUrls(ctx, req)
 	if err != nil {
 		s.log.Error("!!!GetAllUserUrls--->", logger.Error(err))
