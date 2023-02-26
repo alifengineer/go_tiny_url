@@ -16,6 +16,97 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+<<<<<<< HEAD
+=======
+        "/login-user": {
+            "post": {
+                "description": "Login User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login User",
+                "operationId": "login_user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User data",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/auth_service.GetByCredentialsRequest"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
         "/register-user": {
             "post": {
                 "description": "Register User",
@@ -99,6 +190,7 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
         "/sigma/{hash}": {
             "get": {
                 "description": "Handle Longer",
@@ -138,6 +230,8 @@ const docTemplate = `{
                 }
             }
         },
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
         "/user": {
             "get": {
                 "description": "Get User List",
@@ -874,6 +968,7 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
         "auth_service.GetShortUrlResponse": {
             "type": "object",
             "properties": {
@@ -893,6 +988,15 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
+=======
+        "auth_service.GetByCredentialsRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
                     "type": "string"
                 }
             }

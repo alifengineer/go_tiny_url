@@ -24,7 +24,10 @@ const _ = grpc.SupportPackageIsVersion7
 type ShortenerServiceClient interface {
 	CreateShortUrl(ctx context.Context, in *CreateShortUrlRequest, opts ...grpc.CallOption) (*CreateShortUrlResponse, error)
 	GetShortUrl(ctx context.Context, in *GetShortUrlRequest, opts ...grpc.CallOption) (*GetShortUrlResponse, error)
+<<<<<<< HEAD
 	IncClickCount(ctx context.Context, in *IncClickCountRequest, opts ...grpc.CallOption) (*IncClickCountResponse, error)
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
 }
 
 type shortenerServiceClient struct {
@@ -53,6 +56,7 @@ func (c *shortenerServiceClient) GetShortUrl(ctx context.Context, in *GetShortUr
 	return out, nil
 }
 
+<<<<<<< HEAD
 func (c *shortenerServiceClient) IncClickCount(ctx context.Context, in *IncClickCountRequest, opts ...grpc.CallOption) (*IncClickCountResponse, error) {
 	out := new(IncClickCountResponse)
 	err := c.cc.Invoke(ctx, "/auth_service.ShortenerService/IncClickCount", in, out, opts...)
@@ -62,13 +66,18 @@ func (c *shortenerServiceClient) IncClickCount(ctx context.Context, in *IncClick
 	return out, nil
 }
 
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
 // ShortenerServiceServer is the server API for ShortenerService service.
 // All implementations must embed UnimplementedShortenerServiceServer
 // for forward compatibility
 type ShortenerServiceServer interface {
 	CreateShortUrl(context.Context, *CreateShortUrlRequest) (*CreateShortUrlResponse, error)
 	GetShortUrl(context.Context, *GetShortUrlRequest) (*GetShortUrlResponse, error)
+<<<<<<< HEAD
 	IncClickCount(context.Context, *IncClickCountRequest) (*IncClickCountResponse, error)
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
 	mustEmbedUnimplementedShortenerServiceServer()
 }
 
@@ -82,9 +91,12 @@ func (UnimplementedShortenerServiceServer) CreateShortUrl(context.Context, *Crea
 func (UnimplementedShortenerServiceServer) GetShortUrl(context.Context, *GetShortUrlRequest) (*GetShortUrlResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetShortUrl not implemented")
 }
+<<<<<<< HEAD
 func (UnimplementedShortenerServiceServer) IncClickCount(context.Context, *IncClickCountRequest) (*IncClickCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IncClickCount not implemented")
 }
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
 func (UnimplementedShortenerServiceServer) mustEmbedUnimplementedShortenerServiceServer() {}
 
 // UnsafeShortenerServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -134,6 +146,7 @@ func _ShortenerService_GetShortUrl_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+<<<<<<< HEAD
 func _ShortenerService_IncClickCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IncClickCountRequest)
 	if err := dec(in); err != nil {
@@ -152,6 +165,8 @@ func _ShortenerService_IncClickCount_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
 // ShortenerService_ServiceDesc is the grpc.ServiceDesc for ShortenerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -167,10 +182,13 @@ var ShortenerService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetShortUrl",
 			Handler:    _ShortenerService_GetShortUrl_Handler,
 		},
+<<<<<<< HEAD
 		{
 			MethodName: "IncClickCount",
 			Handler:    _ShortenerService_IncClickCount_Handler,
 		},
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "shortener_service.proto",

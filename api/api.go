@@ -24,6 +24,8 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 
 	r.Use(customCORSMiddleware())
 
+	r.POST("/register-user", h.RegisterUser)
+	r.POST("/login-user", h.LoginUser)
 	r.POST("/user", h.CreateUser)
 	r.GET("/user", h.GetUserList)
 	r.GET("/user/:user-id", h.GetUserByID)

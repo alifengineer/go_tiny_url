@@ -209,6 +209,32 @@ func (s *userService) ResetPassword(ctx context.Context, req *pb.ResetPasswordRe
 	return s.strg.User().GetByPK(ctx, &pb.UserPrimaryKey{Id: req.UserId})
 }
 
+func (s *userService) GetByCredentials(ctx context.Context, req *pb.GetByCredentialsRequest) (*pb.User, error) {
+	s.log.Info("---GetByCredentials--->", logger.Any("req", req))
+
+	if len(req.Password) < 6 {
+		err := fmt.Errorf("password must not be less than 6 characters")
+		s.log.Error("!!!GetByCredentials--->", logger.Error(err))
+		return nil, err
+	}
+	user, err := s.strg.User().GetByUsername(ctx, req.GetUsername())
+	if err != nil {
+		s.log.Error("!!!GetByCredentials--->GetByUsername", logger.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+	
+	check, err := security.ComparePassword(user.GetPassword(), req.GetPassword())
+	if err != nil {
+		s.log.Error("!!!GetByCredentials--->ComparePassword", logger.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+	if !check {
+		return nil, status.Error(codes.Unauthenticated, "password is wrong, please check and try again")
+	}
+
+	return user, nil
+}
+
 // func (s *userService) SendMessageToEmail(ctx context.Context, req *pb.SendMessageToEmailRequest) (*emptypb.Empty, error) {
 // 	user, err := s.strg.User().GetByUsername(context.Background(), req.GetEmail())
 // 	if err != nil {

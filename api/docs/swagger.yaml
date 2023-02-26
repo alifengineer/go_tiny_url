@@ -68,6 +68,7 @@ definitions:
       username:
         type: string
     type: object
+<<<<<<< HEAD
   auth_service.GetShortUrlResponse:
     properties:
       created_at:
@@ -81,6 +82,13 @@ definitions:
       updated_at:
         type: string
       user_id:
+=======
+  auth_service.GetByCredentialsRequest:
+    properties:
+      password:
+        type: string
+      username:
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
         type: string
     type: object
   auth_service.GetUserListResponse:
@@ -259,6 +267,59 @@ info:
   contact: {}
   description: This is a api gateway
 paths:
+<<<<<<< HEAD
+=======
+  /login-user:
+    post:
+      consumes:
+      - application/json
+      description: Login User
+      operationId: login_user
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User data
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth_service.GetByCredentialsRequest'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Login User
+      tags:
+      - User
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
   /register-user:
     post:
       consumes:
@@ -305,6 +366,7 @@ paths:
       summary: Register User
       tags:
       - User
+<<<<<<< HEAD
   /sigma/{hash}:
     get:
       description: Handle Longer
@@ -328,6 +390,8 @@ paths:
       summary: Handle Longer
       tags:
       - urls
+=======
+>>>>>>> 460a32714468a8bb22005cd6b4e1305ff03ed84e
   /user:
     get:
       consumes:
