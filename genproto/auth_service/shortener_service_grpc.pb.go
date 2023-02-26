@@ -8,6 +8,7 @@ package auth_service
 
 import (
 	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -23,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ShortenerServiceClient interface {
 	CreateShortUrl(ctx context.Context, in *CreateShortUrlRequest, opts ...grpc.CallOption) (*CreateShortUrlResponse, error)
+	UpdateShortUrl(ctx context.Context, in *CreateShortUrlRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	GetShortUrl(ctx context.Context, in *GetShortUrlRequest, opts ...grpc.CallOption) (*GetShortUrlResponse, error)
 	IncClickCount(ctx context.Context, in *IncClickCountRequest, opts ...grpc.CallOption) (*IncClickCountResponse, error)
 	HandleLongUrl(ctx context.Context, in *HandleLongUrlRequest, opts ...grpc.CallOption) (*HandleLongUrlResponse, error)
@@ -40,6 +42,15 @@ func NewShortenerServiceClient(cc grpc.ClientConnInterface) ShortenerServiceClie
 func (c *shortenerServiceClient) CreateShortUrl(ctx context.Context, in *CreateShortUrlRequest, opts ...grpc.CallOption) (*CreateShortUrlResponse, error) {
 	out := new(CreateShortUrlResponse)
 	err := c.cc.Invoke(ctx, "/auth_service.ShortenerService/CreateShortUrl", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shortenerServiceClient) UpdateShortUrl(ctx context.Context, in *CreateShortUrlRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/auth_service.ShortenerService/UpdateShortUrl", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,6 +98,7 @@ func (c *shortenerServiceClient) GetAllUserUrls(ctx context.Context, in *GetAllU
 // for forward compatibility
 type ShortenerServiceServer interface {
 	CreateShortUrl(context.Context, *CreateShortUrlRequest) (*CreateShortUrlResponse, error)
+	UpdateShortUrl(context.Context, *CreateShortUrlRequest) (*empty.Empty, error)
 	GetShortUrl(context.Context, *GetShortUrlRequest) (*GetShortUrlResponse, error)
 	IncClickCount(context.Context, *IncClickCountRequest) (*IncClickCountResponse, error)
 	HandleLongUrl(context.Context, *HandleLongUrlRequest) (*HandleLongUrlResponse, error)
@@ -100,6 +112,9 @@ type UnimplementedShortenerServiceServer struct {
 
 func (UnimplementedShortenerServiceServer) CreateShortUrl(context.Context, *CreateShortUrlRequest) (*CreateShortUrlResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateShortUrl not implemented")
+}
+func (UnimplementedShortenerServiceServer) UpdateShortUrl(context.Context, *CreateShortUrlRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateShortUrl not implemented")
 }
 func (UnimplementedShortenerServiceServer) GetShortUrl(context.Context, *GetShortUrlRequest) (*GetShortUrlResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetShortUrl not implemented")
@@ -140,6 +155,24 @@ func _ShortenerService_CreateShortUrl_Handler(srv interface{}, ctx context.Conte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ShortenerServiceServer).CreateShortUrl(ctx, req.(*CreateShortUrlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShortenerService_UpdateShortUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateShortUrlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenerServiceServer).UpdateShortUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth_service.ShortenerService/UpdateShortUrl",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenerServiceServer).UpdateShortUrl(ctx, req.(*CreateShortUrlRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -226,6 +259,10 @@ var ShortenerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateShortUrl",
 			Handler:    _ShortenerService_CreateShortUrl_Handler,
+		},
+		{
+			MethodName: "UpdateShortUrl",
+			Handler:    _ShortenerService_UpdateShortUrl_Handler,
 		},
 		{
 			MethodName: "GetShortUrl",

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	pb "go_auth_api_gateway/genproto/auth_service"
+	"go_auth_api_gateway/pkg/helper"
 	"go_auth_api_gateway/storage"
 	"time"
 
@@ -44,7 +45,8 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 			expire_date,
 			user_id,
 			created_at,
-			updated_at
+			updated_at,
+			limit_click
 		) VALUES (
 			$1,
 			$2,
@@ -52,7 +54,8 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 			$4,
 			$5,
 			$6,
-			$7
+			$7,
+			$8
 		)
 		`
 
@@ -64,6 +67,7 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 		req.GetUserId(),
 		time.Now().UTC().Format(time.RFC3339),
 		time.Now().UTC().Format(time.RFC3339),
+		req.GetLimitClick(),
 	)
 
 	if err != nil {
@@ -92,6 +96,40 @@ func (s *shortenerRepo) CreateShortUrl(ctx context.Context, req *pb.CreateShortU
 
 	return resp, nil
 }
+
+func (s *shortenerRepo) UpdateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (rowsAffected int64, err error) {
+
+	if req.GetExpireDate() == "" {
+		req.ExpireDate = time.Now().Add(time.Hour * 1000).Format(time.RFC3339)
+	}
+
+	query := `
+		UPDATE urls SET
+			long_url = :long_url,
+			short_url = :short_url,
+			expire_date = :expire_date,
+			updated_at = now(),
+			limit_click = :limit_click
+		WHERE id = :id
+		`
+	params := map[string]interface{}{
+		"id":          req.GetId(),
+		"long_url":    req.GetLongUrl(),
+		"short_url":   req.GetShortUrl(),
+		"expire_date": req.GetExpireDate(),
+		"limit_click": req.GetLimitClick(),
+	}
+
+	q, arr := helper.ReplaceQueryParams(query, params)
+	result, err := s.db.Exec(ctx, q, arr...)
+	if err != nil {
+		return 0, err
+	}
+	rowsAffected = result.RowsAffected()
+
+	return rowsAffected, nil
+}
+
 func (s *shortenerRepo) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest, onlyExpired bool) (resp *pb.GetShortUrlResponse, err error) {
 
 	resp = &pb.GetShortUrlResponse{}

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"go_auth_api_gateway/api/http"
 	"go_auth_api_gateway/config"
 	"go_auth_api_gateway/grpc/client"
@@ -103,7 +102,6 @@ func ExtractClaims(tokenString string, tokenSecretKey string) (jwt.MapClaims, er
 
 // ExtractToken checks and returns token part of input string
 func ExtractToken(bearer string) (token string, err error) {
-	fmt.Println("bear", bearer)
 	strArr := strings.Split(bearer, " ")
 	if len(strArr) == 2 {
 		return strArr[1], nil

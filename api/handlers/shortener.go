@@ -192,3 +192,40 @@ func (h *Handler) UrlToQrcode(c *gin.Context) {
 	// Set response status to OK
 	c.Status(http_status.OK.Code)
 }
+
+// @Security ApiKeyAuth
+// UpdateShortUrl godoc
+// @ID update_short_url
+// @Router /short-url [PUT]
+// @Summary Update ShortUrl
+// @Description Update ShortUrl
+// @Tags urls
+// @Accept json
+// @Produce json
+// @Param body body auth_service.CreateShortUrlRequest true "Request body"
+// @Success 201 {object} http.Response{data=string} "Response Body"
+// @Response 400 {object} http.Response{data=string} "Bad Request"
+// @Failure 500 {object} http.Response{data=string} "Server Error"
+func (h *Handler) UpdateShortUrl(c *gin.Context) {
+	var req pb.CreateShortUrlRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+
+		h.handleResponse(c, http_status.BadRequest, err.Error())
+		return
+	}
+
+	if !utils.IsLongCorrect(string(req.GetLongUrl())) {
+		err := fmt.Errorf(utils.InvalidURLError, req.GetLongUrl())
+		h.handleResponse(c, http_status.BadRequest, err.Error())
+		return
+	}
+
+	resp, err := h.services.ShortenerService().UpdateShortUrl(c, &req)
+	if err != nil {
+		h.handleResponse(c, http_status.InternalServerError, err.Error())
+		return
+	}
+
+	h.handleResponse(c, http_status.OK, resp)
+}

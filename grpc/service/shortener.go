@@ -13,6 +13,7 @@ import (
 	"github.com/saidamir98/udevs_pkg/logger"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type shortenerService struct {
@@ -64,6 +65,45 @@ func (s *shortenerService) CreateShortUrl(ctx context.Context, req *pb.CreateSho
 	}
 
 	return
+}
+
+func (s *shortenerService) UpdateShortUrl(ctx context.Context, req *pb.CreateShortUrlRequest) (*emptypb.Empty, error) {
+
+	s.log.Info("---UpdateShortUrl--->", logger.Any("req", req))
+
+	if !utils.IsLongCorrect(string(req.GetLongUrl())) {
+		err := fmt.Errorf(fmt.Sprintf(utils.InvalidURLError, req.GetLongUrl()))
+
+		s.log.Error("!!!UpdateShortUrl--->", logger.Error(err))
+
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	hash, err := utils.GetHash([]byte(req.GetLongUrl()))
+	if err != nil {
+		s.log.Error("!!!UpdateShortUrl--->", logger.Error(err))
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	req.ShortUrl = hash
+
+	rowsAffected, err := s.strg.Shortener().UpdateShortUrl(ctx, req)
+	if err != nil {
+		s.log.Error("!!!UpdateShortUrl--->", logger.Error(err))
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	if rowsAffected <= 0 {
+		return nil, status.Error(codes.InvalidArgument, "no rows were affected")
+	}
+
+	err = s.strg.RedisRepo().Create(ctx, hash, req.GetLongUrl(), config.RedisCacheTTL)
+	if err != nil {
+		s.log.Error("!!!UpdateShortUrl--->", logger.Error(err))
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	res := &emptypb.Empty{}
+
+	return res, nil
 }
 
 func (s *shortenerService) GetShortUrl(ctx context.Context, req *pb.GetShortUrlRequest) (resp *pb.GetShortUrlResponse, err error) {
