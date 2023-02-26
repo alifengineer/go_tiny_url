@@ -26,6 +26,10 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 	docs.SwaggerInfo.Schemes = []string{cfg.HTTPScheme}
 
 	r.Use(customCORSMiddleware())
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.POST("/register-user", h.RegisterUser)
+	r.POST("/login-user", h.LoginUser)
+
 	r.Use(h.AuthMiddleware) // this middleware will be applied to all routes
 	{
 		r.PUT("/user", h.UpdateUser)
@@ -37,12 +41,9 @@ func SetUpRouter(h handlers.Handler, cfg config.Config) (r *gin.Engine) {
 		r.PUT("/url-qrcode", h.UrlToQrcode)
 	}
 
-	r.POST("/register-user", h.RegisterUser)
-	r.POST("/login-user", h.LoginUser)
 	// r.GET("/user", h.GetUserList)
 	// r.GET("/user/:user-id", h.GetUserByID)
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return
 }
 

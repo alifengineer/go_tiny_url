@@ -49,6 +49,11 @@ func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, erro
 		Redis: redisClient,
 	})
 
+	_, err = redisClient.Ping(ctx).Result()
+	if err != nil {
+		panic("Redis is not available" + err.Error())
+	}
+
 	return &Store{
 		db:  pool,
 		rdb: redisCache,
@@ -82,4 +87,3 @@ func (s *Store) RedisRepo() storage.RedisRepoI {
 
 	return s.redisRepo
 }
-	

@@ -298,6 +298,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Create ShortUrl
       tags:
       - urls
@@ -325,7 +327,9 @@ paths:
                 data:
                   $ref: '#/definitions/auth_service.GetShortUrlResponse'
               type: object
-      summary: Get ShortUrl
+      security:
+      - ApiKeyAuth: []
+      summary: Get ShortUrlData
       tags:
       - urls
   /short-url/{user-id}:
@@ -370,6 +374,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Get All User Urls
       tags:
       - urls
@@ -393,6 +399,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Handle Longer
       tags:
       - urls
@@ -433,9 +441,11 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Url Convert Qrcode
       tags:
-      - url
+      - Qrcode
   /user:
     delete:
       consumes:
