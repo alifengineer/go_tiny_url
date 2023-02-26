@@ -215,9 +215,6 @@ func (s *shortenerRepo) IncClickCount(ctx context.Context, req *pb.IncClickCount
 func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUrlsRequest) (resp *pb.GetAllUserUrlsResponse, err error) {
 
 	resp = &pb.GetAllUserUrlsResponse{}
-	var (
-		totalCount int64
-	)
 
 	query := `
 		SELECT
@@ -273,7 +270,6 @@ func (s *shortenerRepo) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUr
 		}
 
 		resp.Urls = append(resp.Urls, url)
-		resp.TotalCount = totalCount
 	}
 
 	return resp, nil
