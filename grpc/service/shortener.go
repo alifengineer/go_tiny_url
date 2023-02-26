@@ -131,3 +131,16 @@ func (s *shortenerService) HandleLongUrl(ctx context.Context, req *pb.HandleLong
 
 	return
 }
+
+func (s *shortenerService) GetAllUserUrls(ctx context.Context, req *pb.GetAllUserUrlsRequest) (resp *pb.GetAllUserUrlsResponse, err error) {
+
+	s.log.Info("---GetAllUserUrls--->", logger.Any("req", req))
+
+	resp, err = s.strg.Shortener().GetAllUserUrls(ctx, req)
+	if err != nil {
+		s.log.Error("!!!GetAllUserUrls--->", logger.Error(err))
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return resp, err
+}
