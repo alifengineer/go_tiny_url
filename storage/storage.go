@@ -21,6 +21,13 @@ type StorageI interface {
 	RolePermission() RolePermissionRepoI
 	User() UserRepoI
 	Session() SessionRepoI
+	RedisRepo() RedisRepoI
+}
+
+type RedisRepoI interface {
+	Set(key, value string) error
+	Get(key string) (interface{}, error)
+	Exists(key string) (interface{}, error)
 }
 
 type ClientPlatformRepoI interface {

@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"go_auth_api_gateway/config"
 	"go_auth_api_gateway/storage"
-
+	"github.com/gomodule/redigo/redis"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type Store struct {
 	db              *pgxpool.Pool
+	Rds             *redis.Pool
 	clientPlatform  storage.ClientPlatformRepoI
 	clientType      storage.ClientTypeRepoI
 	client          storage.ClientRepoI
@@ -20,7 +21,8 @@ type Store struct {
 	permissionScope storage.PermissionScopeRepoI
 	user            storage.UserRepoI
 	session         storage.SessionRepoI
-	rolePermission   storage.RolePermissionRepoI
+	rolePermission  storage.RolePermissionRepoI
+	redisRepo       storage.RedisRepoI
 }
 
 func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, error) {
@@ -130,4 +132,13 @@ func (s *Store) Session() storage.SessionRepoI {
 	}
 
 	return s.session
+}
+
+
+func (s *Store) RedisRepo() storage.RedisRepoI {
+	if s.redisRepo == nil {
+		s.redisRepo = NewRedisRepo(s.Rds)
+	}
+
+	return s.redisRepo
 }

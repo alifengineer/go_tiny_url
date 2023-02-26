@@ -1,10 +1,11 @@
 module go_auth_api_gateway
 
-go 1.19
+go 1.17
 
 require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/golang/protobuf v1.5.2
+	github.com/gomodule/redigo v1.8.9
 	github.com/google/uuid v1.3.0
 	github.com/jackc/pgx/v4 v4.18.0
 	github.com/joho/godotenv v1.5.1
