@@ -6,8 +6,8 @@ docker-compose up -d --build
 
 # SWAGGER
 
-http://localhost:8080/swagger/index.html
+http://localhost:8989/swagger/index.html
 
 # FOR REDIRECT 
 
-http://localhost:8080/sigma/$(hash)
+http://localhost:8989/sigma/$(hash)
